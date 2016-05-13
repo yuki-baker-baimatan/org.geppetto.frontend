@@ -44,6 +44,7 @@ define(function (require) {
     TreeVisualiserControllerDAT = require('widgets/treevisualiser/treevisualiserdat/controllers/TreeVisualiserControllerDAT');
     VariableVisualizerController = require('widgets/variablevisualiser/controllers/VariableVisualiserController');
     ButtonBarController = require('widgets/buttonBar/controllers/ButtonBarController');
+    DrawVectorController = require('widgets/drawVector/controllers/DrawVectorController');
 
     return function (GEPPETTO) {
 
@@ -63,7 +64,8 @@ define(function (require) {
             TREEVISUALISERD3: 4,
             VARIABLEVISUALISER: 5,
             CONNECTIVITY: 6,
-            BUTTONBAR: 7
+            BUTTONBAR: 7,
+            DRAWVECTOR: 8
         };
 
         /**
@@ -79,6 +81,7 @@ define(function (require) {
             ButtonBarController: null,
             treeVisDatController: null,
             treeVis3DController: null,
+            drawVectorController: null,
             /**
              * Adds widget to Geppetto
              *
@@ -120,6 +123,9 @@ define(function (require) {
                     case GEPPETTO.Widgets.BUTTONBAR:
                         widget = this.getController(GEPPETTO.Widgets.BUTTONBAR).addButtonBarWidget();
                         break;
+                    case GEPPETTO.Widgets.DRAWVECTOR:
+                        widget = this.getController(GEPPETTO.Widgets.DRAWVECTOR).addDrawVectorWidget();
+                        break;
                     default:
                         break;
                 }
@@ -152,6 +158,8 @@ define(function (require) {
                         return GEPPETTO.Resources.REMOVE_CONNECTIVITY_WIDGETS;
                     case GEPPETTO.Widgets.BUTTONBAR:
                         return GEPPETTO.Resources.REMOVE_BUTTONBAR_WIDGETS;
+                    case GEPPETTO.Widgets.DRAWVECTOR:
+                        return GEPPETTO.Resources.REMOVE_DRAWVECTOR_WIDGETS;
                     default:
                         return GEPPETTO.Resources.NON_EXISTENT_WIDGETS;
                 }
@@ -206,7 +214,12 @@ define(function (require) {
                     }
                     return this.buttonBarController;
                 }
-
+                else if (type == GEPPETTO.Widgets.DRAWVECTOR) {
+                    if (this.drawVectorController == null || undefined) {
+                        this.drawVectorController = new DrawVectorController();
+                    }
+                    return this.drawVectorController;
+                }
             }
         };
     };

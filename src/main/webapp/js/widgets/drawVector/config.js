@@ -10,7 +10,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Contributors:
- *        OpenWorm - http://openworm.org/people.html
+ *      OpenWorm - http://openworm.org/people.html
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,38 +32,44 @@
  *******************************************************************************/
 
 /**
- * Loads widget scripts
+ * Loads draw vector scripts
  *
- * @author Jesus Martinez (jesus@metacell.us)
+ * @author mcantarelli
+ */
+/*
+ * Configure what dependencies are needed for each library
  */
 
-//Widget Classes
-define(function (require) {
-    return function (GEPPETTO) {
+require.config({
+    /*
+     * Values in here are for dependencies that more than one module/script requires and/or needs.
+     * E.G. If depenedency it's used more than once, it goes in here.
+     */
+    paths: {
+        'fabric': "widgets/drawVector/vendor/fabric.min",
+    },
 
-        require('widgets/WidgetFactory')(GEPPETTO);
-        require('widgets/WidgetsListener')(GEPPETTO);
-        require("widgets/WidgetUtility");
-        require("widgets/ContextMenu")(GEPPETTO);
-        //Plot Widget
-        require("widgets/plot/config")(GEPPETTO);
-        //Popup Widget
-        require("widgets/popup/config");
-        //Scatter3d Widget
-        require("widgets/scatter3d/config");
-        //TreeVisualiser DAT Widget
-        require("widgets/treevisualiser/treevisualiserdat/config")(GEPPETTO);
-        //TreeVisualiser D3 Widget
-        require("widgets/treevisualiser/treevisualiserd3/config")(GEPPETTO);
-        //VariableVisualiser widget
-        require("widgets/variablevisualiser/config");
-        //Connectivity Widget
-        require("widgets/connectivity/config");
-        //ButtonBar widget
-        require("widgets/buttonBar/config");
-        //Draw vector widget
-        require("widgets/drawVector/config");
-
-        loadCss("geppetto/js/widgets/Widget.css");
-    };
 });
+
+/*
+ * Libraries used by draw vector widget
+ */
+var libraries = [];
+libraries.push("fabric");
+
+
+/*
+ * Load libraries, and CSS after libraries are loaded
+ */
+require(libraries, function (flot, math) {
+//	console.log(math.parser());
+    window.math = math;
+    loadCss("geppetto/js/widgets/drawVector/drawVector.css");
+});	
+
+define(function(require) {
+	return function(GEPPETTO) {
+
+	};
+});
+
