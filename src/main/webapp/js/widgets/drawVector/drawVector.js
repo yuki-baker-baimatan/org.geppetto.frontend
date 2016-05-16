@@ -1,7 +1,7 @@
 /*******************************************************************************
  * The MIT License (MIT)
  *
- * Copyright (c) 2011, 2013 OpenWorm.
+ * Copyright (c) 2011, 2016 OpenWorm.
  * http://openworm.org
  *
  * All rights reserved. This program and the accompanying materials
@@ -31,10 +31,10 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 /**
- * Popup Widget
+ * Draw vector Widget
  *
- * @module Widgets/Popup
- * @author Jesus R. Martinez (jesus@metacell.us)
+ * @module Widgets/DrawVector
+ * @author mcantarelli
  */
 define(function (require) {
 
@@ -47,16 +47,25 @@ define(function (require) {
          * Initialize the popup widget
          */
         initialize: function (options) {
+            var that = this;
             this.id = options.id;
             this.name = options.name;
             this.visible = options.visible;
             this.render();
             this.setSize(615, 615);
             this.customHandlers = [];
-            //set class pop up
+
             $("#" + this.id).addClass("drawVector");
-            $("#" + this.id).append("<div id='canvasarea'><canvas id='c' width='700' height='700'></canvas><div id='mouseX'></div> <div id='mouseY'></div></div>");
-            this.canvas = new fabric.Canvas('c', {selection: false});
+            var canvasId = "canvas" + this.id;
+            $("#" + this.id).append("<div id='canvasarea'><div class='drawPanel'><div class='mouseX'></div> <div class='mouseY'></div><div class='icon fa fa-save saveIcon'></div><div class='icon fa fa-line-chart vectorIcon'></div></div><canvas id='" + canvasId + "' width='700' height='700'></canvas></div>");
+            $("#" + this.id + " .saveIcon").click(function () {
+                GEPPETTO.Console.executeCommand(that.id + ".downloadSVG();");
+            });
+            $("#" + this.id + " .vectorIcon").click(function () {
+                GEPPETTO.Console.executeCommand(that.id + ".getVector();");
+            });
+
+            this.canvas = new fabric.Canvas(canvasId, {selection: false});
             fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
 
             this.canvasWidth = 700;
@@ -74,20 +83,21 @@ define(function (require) {
 
             //this.enableZoom();
 
-            var line = this.makeLine([this.xOrigin, this.yOrigin + this.axisHeight, this.xOrigin + this.axisWidth, this.yOrigin + this.axisHeight]);
+            //creates the fist vector
+            var line = this.createVector([this.xOrigin, this.yOrigin + this.axisHeight, this.xOrigin + this.axisWidth, this.yOrigin + this.axisHeight]);
 
             this.canvas.add(line);
 
             this.canvas.add(
-                this.makeControlPoint(line.get('x1'), line.get('y1'), null, line),
-                this.makeControlPoint(line.get('x2'), line.get('y2'), line, null)
+                this.createControlPoint(line.get('x1'), line.get('y1'), null, line),
+                this.createControlPoint(line.get('x2'), line.get('y2'), line, null)
             );
         },
 
 
         //Factory functions
 
-        makeControlPoint: function (left, top, lLine, rLine) {
+        createControlPoint: function (left, top, lLine, rLine) {
             var controlPoint = new fabric.Circle({
                 left: left,
                 top: top,
@@ -96,10 +106,12 @@ define(function (require) {
                 fill: '#fff',
                 hasControls: false,
                 hasBorders: false,
+                selectable: true,
                 targetFindTolerance: 6,
                 stroke: '#666'
             });
 
+            //set the left line and right line links
             controlPoint.lLine = lLine;
             controlPoint.rLine = rLine;
 
@@ -113,7 +125,12 @@ define(function (require) {
             return controlPoint;
         },
 
-        makeLine: function (coords) {
+        /**
+         * This creates a vector
+         * @param coords
+         * @returns {*}
+         */
+        createVector: function (coords) {
             return new fabric.Line(coords, {
                 fill: 'white',
                 stroke: 'white',
@@ -129,7 +146,14 @@ define(function (require) {
             });
         },
 
-        makeSquare: function (left, top) {
+
+        /**
+         * This is the red square visualised at the center of a line
+         * @param left
+         * @param top
+         * @returns {*}
+         */
+        createRedSquare: function (left, top) {
             return new fabric.Rect({
                 left: left,
                 top: top,
@@ -149,13 +173,14 @@ define(function (require) {
 
         //Utility functions
 
-
         getNormalizedToYAxis: function (y) {
-            return y * this.maxY / this.axisHeight;
+            var num = y * this.maxY / this.axisHeight;
+            return Math.round(num * 1000) / 1000;
         },
 
         getNormalizedToXAxis: function (x) {
-            return x * this.maxX / this.axisWidth;
+            var num = x * this.maxX / this.axisWidth;
+            return Math.round(num * 1000) / 100;
         },
 
         // Given a X in the screen coordinate give 1st quadrant cartesian coordinates
@@ -168,6 +193,13 @@ define(function (require) {
             return this.getNormalizedToYAxis(-(py - this.axisHeight - this.yOrigin));
         },
 
+        /**
+         * Finds the closest point between two alternatives
+         * @param from teh source from which to measure
+         * @param pointA first candidate
+         * @param pointB second candidate
+         * @returns {*}
+         */
         closer: function (from, pointA, pointB) {
             var dA = Infinity;
             var dB = Infinity;
@@ -180,19 +212,30 @@ define(function (require) {
             return dA < dB ? pointA : pointB;
         },
 
+        /**
+         * Adds the event handlers with the logic do add and remove control points and update the canvas
+         */
         setupHandlers: function () {
 
-            //Events handlers
-        	var that=this;
-            that.canvas.on('mouse:move', function (e) {
-                var pointer = that.canvas.getPointer(event.e);
-                $("#mouseX").html(that.xScreenToXCart(pointer.x));
-                $("#mouseY").html(that.yScreenToYCart(pointer.y));
-                that.canvas.forEachObject(function (o) {
-                    o.setCoords();
-                });
-            });
+            var that = this;
 
+            that.canvas.on('mouse:over', function (e) {
+                var p = e.target
+                if (p instanceof fabric.Circle) {
+                    //we color the control point in red
+                    p.fill = "red";
+                    that.canvas.renderAll();
+                }
+                else if (p instanceof fabric.Line) {
+                    if (!p.grid) {
+                        //we add a red square at the center of the line
+                        p.centerSquare = that.createRedSquare(p.getCenterPoint().x, p.getCenterPoint().y);
+                        that.canvas.add(p.centerSquare);
+                        p.centerSquare.bringToFront();
+                        that.canvas.renderAll();
+                    }
+                }
+            });
 
             that.canvas.on('mouse:out', function (e) {
                 var p = e.target
@@ -210,34 +253,19 @@ define(function (require) {
             });
 
             that.canvas.on('mouse:down', function (e) {
-                var pointer = that.canvas.getPointer(event.e);
-                var closest = null;
-                that.canvas.forEachObject(function (o) {
-                    //search for the closest control point
-                    if (o instanceof fabric.Circle) {
-                        closest = that.closer(pointer, closest, o);
-                    }
-                });
-                if (closest) {
-                    closest.left = pointer.x;
-                    closest.top = pointer.y;
-                    that.canvas.fire('object:moving', {target: closest}, e);
-                }
-
-            });
-
-            that.canvas.on('mouse:over', function (e) {
-                var p = e.target
-                if (p instanceof fabric.Circle) {
-                    p.fill = "red";
-                    that.canvas.renderAll();
-                }
-                else if (p instanceof fabric.Line) {
-                    if (!p.grid) {
-                        p.centerSquare = that.makeSquare(p.getCenterPoint().x, p.getCenterPoint().y);
-                        that.canvas.add(p.centerSquare);
-                        p.centerSquare.bringToFront();
-                        that.canvas.renderAll();
+                if (!GEPPETTO.isKeyPressed("alt")) {
+                    var pointer = that.canvas.getPointer(event.e);
+                    var closest = null;
+                    that.canvas.forEachObject(function (o) {
+                        //search for the closest control point
+                        if (o instanceof fabric.Circle) {
+                            closest = that.closer(pointer, closest, o);
+                        }
+                    });
+                    if (closest) {
+                        closest.left = pointer.x;
+                        closest.top = pointer.y;
+                        that.canvas.fire('object:moving', {target: closest}, e);
                     }
                 }
             });
@@ -277,7 +305,7 @@ define(function (require) {
                 }
                 else {
                     if (controlPoint.rLine) {
-                        //imposes the right constraint
+                        //imposes the right movement constraint
                         if (controlPoint.left > that.xOrigin + that.axisWidth) {
                             controlPoint.left = that.xOrigin + that.axisWidth;
                         }
@@ -288,14 +316,13 @@ define(function (require) {
                     }
                 }
 
-                that.canvas.renderAll();
+                that.canvas.deactivateAll().renderAll();
             });
 
             that.canvas.on('object:selected', function (e) {
                 var clicked = e.target;
                 var pointer = that.canvas.getPointer(event.e);
                 if (clicked instanceof fabric.Line) {
-
                     //the clicked line will end at the mouse coordinates
                     clicked.set({'x2': pointer.x, 'y2': pointer.y});
 
@@ -304,12 +331,12 @@ define(function (require) {
                     var circle2Y = clicked.rControlPoint.top;
 
                     //we create a new line starting from where we clicked and ending at the end of the original clicked line
-                    var newLine = that.makeLine([pointer.x, pointer.y, circle2X, circle2Y]);
+                    var newLine = that.createVector([pointer.x, pointer.y, circle2X, circle2Y]);
                     newLine.lControlPoint = clicked.rControlPoint;
                     that.canvas.add(newLine);
 
                     //we add a new circle as a control point between the clicked line and the newly created one
-                    var newControlPoint = that.makeControlPoint(newLine.get('x2'), newLine.get('y2'), newLine, clicked.rControlPoint.rLine);
+                    var newControlPoint = that.createControlPoint(newLine.get('x2'), newLine.get('y2'), newLine, clicked.rControlPoint.rLine);
                     that.canvas.add(newControlPoint);
 
                     //let's update the original control point to link the two segments
@@ -320,19 +347,43 @@ define(function (require) {
                     //let's bring all control point to the front (so that lines don't go on top of them)
                     newControlPoint.bringToFront();
                     clicked.rControlPoint.bringToFront();
-
                 }
-                that.canvas.renderAll();
+                else if (clicked instanceof fabric.Circle) {
+                    if (GEPPETTO.isKeyPressed("alt")) {
+                        //we remove the control point
+                        clicked.lLine.set('x2', clicked.rLine.get('x2'));
+                        clicked.lLine.set('y2', clicked.rLine.get('y2'));
+                        clicked.lLine.setCoords();
+                        clicked.rLine.rControlPoint.lLine = clicked.lLine;
+                        clicked.lLine.rControlPoint = clicked.rLine.rControlPoint;
+                        that.canvas.remove(clicked.rLine);
+                        that.canvas.remove(clicked);
+                    }
+                }
+                that.canvas.deactivateAll().renderAll();
                 that.canvas.calcOffset();
             });
+
+            that.canvas.on('mouse:move', function (e) {
+                var pointer = that.canvas.getPointer(event.e);
+                $("#" + that.id + " .mouseX").html("X: " + that.xScreenToXCart(pointer.x));
+                $("#" + that.id + " .mouseY").html("Y: " + that.yScreenToYCart(pointer.y));
+                that.canvas.forEachObject(function (o) {
+                    o.setCoords();
+                });
+            });
+
         },
 
+        /**
+         * Adds to the canvas a grid and the two axis and labels
+         */
         buildAxisAndGrid: function () {
             var grid = 50;
             for (var i = 0; i <= (this.axisWidth / grid); i++) {
                 //X grid lines
                 this.canvas.add(new fabric.Line([i * grid + this.xOrigin, this.yOrigin, i * grid + this.xOrigin, this.axisHeight + this.yOrigin], {
-                    stroke: '#ccc',
+                    stroke: '#737373',
                     hasControls: false,
                     hasBorders: false,
                     selectable: false,
@@ -342,7 +393,7 @@ define(function (require) {
 
                 //Y grid lines
                 this.canvas.add(new fabric.Line([0 + this.xOrigin, i * grid + this.yOrigin, this.axisWidth + this.xOrigin, i * grid + this.yOrigin], {
-                    stroke: '#ccc',
+                    stroke: '#737373',
                     hasControls: false,
                     hasBorders: false,
                     selectable: false,
@@ -379,13 +430,14 @@ define(function (require) {
                 }));
             }
 
-            //Y axis
+            //X axis
             this.canvas.add(new fabric.Line([this.xOrigin, this.yOrigin - 10, this.xOrigin, this.axisHeight + this.yOrigin], {
                 stroke: "#fc6320",
                 hasControls: false,
                 hasBorders: false,
                 selectable: false,
-                strokeWidth: 2
+                strokeWidth: 2,
+                grid: true
             })).bringToFront();
 
             //Y axis
@@ -394,7 +446,8 @@ define(function (require) {
                 hasControls: false,
                 hasBorders: false,
                 selectable: false,
-                strokeWidth: 2
+                strokeWidth: 2,
+                grid: true
             })).bringToFront();
 
             //Y axis Arrow
@@ -443,8 +496,7 @@ define(function (require) {
             // IE 6/7/8
             else canvasarea.attachEvent("onmousewheel", zoom);
             return this;
-        }
-        ,
+        },
 
         zoom: function (e) {
             var evt = window.event || e;
@@ -455,12 +507,42 @@ define(function (require) {
             canvas.zoomToPoint({x: x, y: y}, newZoom);
             if (e != null)e.preventDefault();
             return false;
-        }
-        ,
+        },
 
+        /**
+         * Retrieves the vector in Cartesian coordinates and shows it in a popup
+         */
+        getVector: function () {
+            var vector = [];
+            var current = null;
+            this.canvas.forEachObject(function (o) {
+                if (o instanceof fabric.Circle && !o.lLine) {
+                    current = o;
+                }
+            });
+            while (current.rLine) {
+                //we want to find the first control point, the one who doesn't have a line on its left
+                vector.push([this.xScreenToXCart(current.left), this.yScreenToYCart(current.top)]);
+                current = current.rLine.rControlPoint;
+            }
+            vector.push([this.xScreenToXCart(current.left), this.yScreenToYCart(current.top)]);
+            alert(JSON.stringify(vector));
+        },
+
+        /**
+         * Downloads an SVG for the current canvas
+         */
         downloadSVG: function () {
             var element = document.createElement('a');
-            element.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(canvas.toSVG()));
+
+            this.canvas.forEachObject(function (o) {
+                if (!o.grid && o instanceof fabric.Line) {
+                    o.set('fill', 'black');
+                    o.set('stroke', 'black');
+                }
+            });
+
+            element.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(this.canvas.toSVG()));
             element.setAttribute('download', "vector.svg");
 
             element.style.display = 'none';
@@ -469,6 +551,13 @@ define(function (require) {
             element.click();
 
             document.body.removeChild(element);
+
+            this.canvas.forEachObject(function (o) {
+                if (!o.grid && o instanceof fabric.Line) {
+                    o.set('fill', 'white');
+                    o.set('stroke', 'white');
+                }
+            });
         }
 
     });
