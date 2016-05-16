@@ -527,6 +527,7 @@ define(function (require) {
             }
             vector.push([this.xScreenToXCart(current.left), this.yScreenToYCart(current.top)]);
             alert(JSON.stringify(vector));
+            return vector;
         },
 
         /**
