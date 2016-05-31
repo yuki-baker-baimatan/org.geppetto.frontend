@@ -253,8 +253,9 @@ define(function (require) {
             });
 
             that.canvas.on('mouse:down', function (e) {
+                var evt = window.event || e;
                 if (!GEPPETTO.isKeyPressed("alt")) {
-                    var pointer = that.canvas.getPointer(event.e);
+                    var pointer = that.canvas.getPointer(evt.e);
                     var closest = null;
                     that.canvas.forEachObject(function (o) {
                         //search for the closest control point
@@ -320,8 +321,9 @@ define(function (require) {
             });
 
             that.canvas.on('object:selected', function (e) {
-                var clicked = e.target;
-                var pointer = that.canvas.getPointer(event.e);
+            	var evt = window.event || e;
+            	var clicked = evt.target;
+            	var pointer = that.canvas.getPointer(evt.e);
                 if (clicked instanceof fabric.Line) {
                     //the clicked line will end at the mouse coordinates
                     clicked.set({'x2': pointer.x, 'y2': pointer.y});
@@ -365,7 +367,8 @@ define(function (require) {
             });
 
             that.canvas.on('mouse:move', function (e) {
-                var pointer = that.canvas.getPointer(event.e);
+            	var evt = window.event || e;
+            	var pointer = that.canvas.getPointer(evt.e);
                 $("#" + that.id + " .mouseX").html("X: " + that.xScreenToXCart(pointer.x));
                 $("#" + that.id + " .mouseY").html("Y: " + that.yScreenToYCart(pointer.y));
                 that.canvas.forEachObject(function (o) {
