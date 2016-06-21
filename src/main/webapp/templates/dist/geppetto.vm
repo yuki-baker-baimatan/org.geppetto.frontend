@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="geppetto/css/gpt-icons.css" />
 
     <script>
+    document.domain='gpt.org';
     var path = "org.geppetto.frontend";
     if(path === "") {
     window.BUNDLE_CONTEXT_PATH = "org.geppetto.frontend";
@@ -88,27 +89,30 @@
 
                  <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="console">Console Loading...</div>
-                        <div role="tabpanel" class="tab-pane panel panel-default" id="pyconsole">
-                           <iframe src="http://python.gpt.org:9999/tree" marginwidth="0" marginheight="0" frameborder="no" scrolling="yes" style="width:100%; height:100%"">
-                          </iframe>
-                        </div>
-                        <div role="tabpanel" id="experiments" class="tab-pane panel panel-default">
-                                <div class="col-lg-6 experimentsResults panel-body experimentsResultsOutput" id="experimentsOutput">
-                                    <table id="experimentsTable" class="table table-condensed experimentsTable" style="border-collapse:collapse;">
-                                        <thead class="experimentsTableColumn">
-                                            <tr><th style="width:10%;text-align:center">Status</th>
-                                            <th style="width:30%;">Name</th>
-                                            <th style="width:15%;">Date</th>
-                                            <th style="width:25%;"><div class="new_experiment" id="new_experiment" tile="New experiment"><i class='new_experiment_icon fa fa-plus fa-lg'></i></div></th>
-                                            </tr>
-                                        </thead>
+                        <div role="tabpanel" id="experiments" class="tab-pane panel">
+                            <div class="col-lg-6 experimentsResults panel-body experimentsResultsOutput" id="experimentsOutput">
+                                <table id="experimentsTable" class="table table-condensed experimentsTable" style="border-collapse:collapse;">
+                                    <thead class="experimentsTableColumn">
+                                        <tr><th style="width:10%;text-align:center">Status</th>
+                                        <th style="width:30%;">Name</th>
+                                        <th style="width:15%;">Date</th>
+                                        <th style="width:25%;"><div class="new_experiment" id="new_experiment" tile="New experiment"><i class='new_experiment_icon fa fa-plus fa-lg'></i></div></th>
+                                        </tr>
+                                    </thead>
 
-                                    <tbody>
-                                    </tbody>
-                                    </table>
-                                </div>
+                                <tbody>
+                                </tbody>
+                                </table>
                             </div>
                         </div>
+                        
+                        <div role="tabpanel" class="tab-pane panel" id="pyconsole">
+                        	<div class="col-lg-6 panel-body" id="pyConsoleOutput">
+	                           <iframe src="http://python.gpt.org:9999/notebooks/code/geppetto-luna-code/org.geppetto.python/frontend-jupyter/gpt-jupyter.ipynb" marginwidth="0" marginheight="0" frameborder="no" scrolling="yes" style="width:100%; height:100%"">
+	                          </iframe>
+                        	</div>  
+                        </div>
+                  	</div>
                   </div>
             </div>
 

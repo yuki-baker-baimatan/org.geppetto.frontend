@@ -203,6 +203,7 @@ define(function(require) {
                 $('#experimentsButton').click(function (e) {
                     if (!visibleExperiments) {
                         $('#console').hide();
+                        $("#pyconsole").hide();
                         $('#experiments').show();
                         $(this).tab('show');
                         visibleExperiments = true;
@@ -215,6 +216,15 @@ define(function(require) {
                 $('#consoleButton').click(function (e) {
                     $('#console').show();
                     $('#experiments').hide();
+                    $("#pyconsole").hide();
+                    $(this).tab('show');
+                    visibleExperiments = false;
+                });
+                
+                $('#pyConsoleButton').click(function (e) {
+                	$('#console').hide();
+                	$('#experiments').hide();
+                	 $("#pyconsole").show();
                     $(this).tab('show');
                     visibleExperiments = false;
                 });
@@ -231,6 +241,21 @@ define(function(require) {
                         }
                         $('#experiments').resize();
                         $("#experiments").get(0).style.top = "0px";
+                    }.bind(this)
+                });
+                
+                $("#pyconsole").resizable({
+                    handles: 'n',
+                    minHeight: 100,
+                    autoHide: true,
+                    maxHeight: 400,
+                    resize: function (event, ui) {
+                        if (ui.size.height > ($("#footerHeader").height() * .75)) {
+                            $("#pyconsole").height($("#footerHeader").height() * .75);
+                            event.preventDefault();
+                        }
+                        $('#pyconsole').resize();
+                        $("#pyconsole").get(0).style.top = "0px";
                     }.bind(this)
                 });
 
