@@ -44,7 +44,9 @@ define(function (require) {
     TreeVisualiserControllerDAT = require('widgets/treevisualiser/treevisualiserdat/controllers/TreeVisualiserControllerDAT');
     VariableVisualizerController = require('widgets/variablevisualiser/controllers/VariableVisualiserController');
     ButtonBarController = require('widgets/buttonBar/controllers/ButtonBarController');
-
+    PyVariableVisualizerController = require('widgets/pyvariablevisualiser/controllers/PyVariableVisualiserController');
+    
+    
     return function (GEPPETTO) {
 
         /**
@@ -63,7 +65,8 @@ define(function (require) {
             TREEVISUALISERD3: 4,
             VARIABLEVISUALISER: 5,
             CONNECTIVITY: 6,
-            BUTTONBAR: 7
+            BUTTONBAR: 7,
+            PYVARIABLEVISUALISER: 8,
         };
 
         /**
@@ -79,6 +82,7 @@ define(function (require) {
             ButtonBarController: null,
             treeVisDatController: null,
             treeVis3DController: null,
+            pyVariableVisController: null,
             /**
              * Adds widget to Geppetto
              *
@@ -120,6 +124,10 @@ define(function (require) {
                     case GEPPETTO.Widgets.BUTTONBAR:
                         widget = this.getController(GEPPETTO.Widgets.BUTTONBAR).addButtonBarWidget();
                         break;
+                    //create variable visualiser widget
+                    case GEPPETTO.Widgets.PYVARIABLEVISUALISER:
+                        widget = this.getController(GEPPETTO.Widgets.PYVARIABLEVISUALISER).addPyVariableVisualiserWidget();
+                        break;    
                     default:
                         break;
                 }
@@ -152,6 +160,8 @@ define(function (require) {
                         return GEPPETTO.Resources.REMOVE_CONNECTIVITY_WIDGETS;
                     case GEPPETTO.Widgets.BUTTONBAR:
                         return GEPPETTO.Resources.REMOVE_BUTTONBAR_WIDGETS;
+                    case GEPPETTO.Widgets.PYVARIABLEVISUALISER:
+                        return GEPPETTO.Resources.REMOVE_PYVARIABLEVISUALISER_WIDGETS;
                     default:
                         return GEPPETTO.Resources.NON_EXISTENT_WIDGETS;
                 }
@@ -205,6 +215,12 @@ define(function (require) {
                         this.buttonBarController = new ButtonBarController();
                     }
                     return this.buttonBarController;
+                }
+                else if (type == GEPPETTO.Widgets.PYVARIABLEVISUALISER) {
+                    if (this.pyVariableVisController == null || undefined) {
+                        this.pyVariableVisController = new PyVariableVisualizerController();
+                    }
+                    return this.pyVariableVisController;
                 }
 
             }
