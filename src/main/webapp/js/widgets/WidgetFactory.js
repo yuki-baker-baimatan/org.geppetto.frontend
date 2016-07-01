@@ -45,6 +45,7 @@ define(function (require) {
     VariableVisualizerController = require('widgets/variablevisualiser/controllers/VariableVisualiserController');
     ButtonBarController = require('widgets/buttonBar/controllers/ButtonBarController');
     PyVariableVisualizerController = require('widgets/pyvariablevisualiser/controllers/PyVariableVisualiserController');
+    PyPopupController = require('widgets/pypopup/controllers/PyPopupController');
     
     
     //Use as template for new widgets
@@ -70,6 +71,7 @@ define(function (require) {
             CONNECTIVITY: 6,
             BUTTONBAR: 7,
             PYVARIABLEVISUALISER: 8,
+            PYPOPUP: 9,
             //WIDGETNAME: N
         };
 
@@ -87,6 +89,7 @@ define(function (require) {
             treeVisDatController: null,
             treeVis3DController: null,
             pyVariableVisController: null,
+            pyPopupsController: null,
             //WIDGETNAMEController: null
 
             /**
@@ -95,7 +98,7 @@ define(function (require) {
              * @param {GEPPETTO.Widgets}
              *            widgetType - Widget to add to Geppetto
              */
-            addWidget: function (widgetType) {
+            addWidget: function (widgetType, widgetId) {
                 var widget = null;
                 switch (widgetType) {
                     //create plotting widget
@@ -130,9 +133,13 @@ define(function (require) {
                     case GEPPETTO.Widgets.BUTTONBAR:
                         widget = this.getController(GEPPETTO.Widgets.BUTTONBAR).addButtonBarWidget();
                         break;
-                    //create variable visualiser widget
+                    //create variable visualiser widget for jupyter
                     case GEPPETTO.Widgets.PYVARIABLEVISUALISER:
                         widget = this.getController(GEPPETTO.Widgets.PYVARIABLEVISUALISER).addPyVariableVisualiserWidget();
+                        break;
+                    //create pop up widget for jupyter
+                    case GEPPETTO.Widgets.PYPOPUP:
+                        widget = this.getController(GEPPETTO.Widgets.PYPOPUP).addPyPopupWidget(widgetId);
                         break;    
                     //Use as template for new widgets
                     //create WIDGETNAME
@@ -174,6 +181,8 @@ define(function (require) {
                         return GEPPETTO.Resources.REMOVE_BUTTONBAR_WIDGETS;
                     case GEPPETTO.Widgets.PYVARIABLEVISUALISER:
                         return GEPPETTO.Resources.REMOVE_PYVARIABLEVISUALISER_WIDGETS;
+                    case GEPPETTO.Widgets.PYPOPUP:
+                    	return GEPPETTO.Resources.REMOVE_PYPOPUP_WIDGETS;
                     //Use as template for new widgets
                     //case GEPPETTO.Widgets.WIDGETNAME:
                     //    return GEPPETTO.Resources.REMOVE_WIDGETNAME_WIDGETS;
@@ -236,6 +245,12 @@ define(function (require) {
                         this.pyVariableVisController = new PyVariableVisualizerController();
                     }
                     return this.pyVariableVisController;
+                }
+                else if (type == GEPPETTO.Widgets.PYPOPUP) {
+                    if (this.pyPopupsController == null || undefined) {
+                        this.pyPopupsController = new PyPopupController();
+                    }
+                    return this.pyPopupsController;
                 }
                 //Use as template for new widgets
                 //else if (type == GEPPETTO.Widgets.WIDGETNAME) {

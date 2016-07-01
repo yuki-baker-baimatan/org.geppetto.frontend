@@ -74,6 +74,7 @@ define(function (require) {
             this.setSize(options.height, options.width);
             this.dialog.append("<div class='varvis_header'></div><div class='varvis_body'></div>");
             
+            this.value_changed();
             this.model.on('change:value', this.value_changed, this);
         },
         
