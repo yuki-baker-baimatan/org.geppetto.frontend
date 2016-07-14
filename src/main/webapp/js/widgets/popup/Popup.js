@@ -40,6 +40,9 @@ define(function (require) {
 
     var Widget = require('widgets/Widget');
     var $ = require('jquery');
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var Mat = require('jsx!components/dev/material_ui/MaterialComponents');
 
     /**
      * Private function to hookup custom event handlers
@@ -96,6 +99,8 @@ define(function (require) {
             this.customHandlers = [];
             //set class pop up
             $("#" + this.id).addClass("popup");
+            
+            
         },
 
         /**
@@ -119,6 +124,10 @@ define(function (require) {
                 GEPPETTO.Console.log("Hooked up custom handlers for " + this.id);
             }
 
+            
+            
+            ReactDOM.render(React.createFactory(Mat)({show:true}), document.getElementById(this.id));
+            
             return this;
         },
 

@@ -102,6 +102,8 @@ define(function (require) {
             this.model.on('change:value', this.value_changed, this);
             this.model.on('change:taka', this.taka_changed, this);
             
+            window[name] = this;
+            
             jptWidget = this;
         },
 

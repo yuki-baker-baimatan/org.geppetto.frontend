@@ -23,8 +23,8 @@
     window.BUNDLE_CONTEXT_PATH = path;
     }
     window.USE_SSL = false;
-    window.EMBEDDED = false;
-    window.EMBEDDEDURL = "/";
+    window.EMBEDDED = true;
+    window.EMBEDDEDURL = "http://127.0.0.1:3000/";
     </script>
 
     <script>
@@ -108,7 +108,7 @@
                         
                         <div role="tabpanel" class="tab-pane panel" id="pyconsole">
                         	<div class="col-lg-6 panel-body" id="pyConsoleOutput">
-	                           <iframe src="http://python.gpt.org:9999/notebooks/code/geppetto-luna-code/org.geppetto.python/frontend-jupyter/gpt-jupyter.ipynb" marginwidth="0" marginheight="0" frameborder="no" scrolling="yes" style="width:100%; height:100%"">
+	                           <iframe id="pyConsoleFrame" src="http://python.gpt.org:9999/notebooks/code/geppetto-luna-code/org.geppetto.python/frontend-jupyter/gpt-jupyter.ipynb" marginwidth="0" marginheight="0" frameborder="no" scrolling="yes" style="width:100%; height:100%"">
 	                          </iframe>
                         	</div>  
                         </div>
