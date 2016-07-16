@@ -60,6 +60,8 @@ require.config({
         geppetto: 'GEPPETTO',
         react: 'vendor/react',
         'react-dom': 'vendor/react-dom',
+        'react-addons-create-fragment': 'vendor/react-addons-create-fragment',
+        'react-addons-transition-group':'vendor/react-addons-transition-group', 
         griddle: 'vendor/griddle',
         jsx: 'vendor/jsx',
         JSXTransformer: 'vendor/JSXTransformer',
@@ -97,6 +99,8 @@ require.config({
         'vendor/Detector': ["jquery"],
         'vendor/jquery.cookie': ["jquery"],
         'vendor/rAF': ["jquery"],
+        'vendor/react-addons-transition-group': ["react"],
+        'vendor/react-addons-create-fragment': ["react"],
         JSXTransformer: {
             exports: "JSXTransformer"
         },

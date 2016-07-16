@@ -32,31 +32,46 @@
 
 define(function(require) {
 
-	var React = require('react'),
-		ReactDOM = require('react-dom');
+// Not needed as tap-event-pluging is embedded together with react and the addons
+//	var injectTapEventPlugin = require("./react-tap-event-plugin");
+//	injectTapEventPlugin();
 	
-	var injectTapEventPlugin = require("./react-tap-event-plugin");
-	injectTapEventPlugin();
+	var React = require('react');
+	var ReactDOM = require('react-dom');
+	
+	var ReactAddonsCreateFragment = require('react-addons-create-fragment');
+	var ReactAddonsTransitionGroup = require('react-addons-transition-group');
 	
 	var matui = require('./material-ui');
-	var AppBar = matui.AppBar;
 	var MuiThemeProvider = matui.MuiThemeProvider;
-//	var darkBaseTheme = matui.styles.baseThemes.darkBaseTheme;
-//	var getMuiTheme = matui.styles.getMuiTheme;
+	
+	var AppBarComponent = React.createClass({
 
-	var appBarComponent = React.createClass({
         render: function(){
-        	
             return (
-            		<MuiThemeProvider>
-            			<AppBar title='Title' iconClassNameRight="muidocs-icon-navigation-expand-more"/>
-            		</MuiThemeProvider>	
-            		);
+        		<MuiThemeProvider>
+        			<matui.AppBar title='Title' iconClassNameRight="muidocs-icon-navigation-expand-more" onTitleTouchTap={this.handleTouchTap} onClick={this.handleClick}/>
+        		</MuiThemeProvider>	
+    		);
+        },
+        
+        handleClick: function(e) {
+            console.log("click", e);
+        },
+
+        handleTouchTap: function(e) {
+            console.log("touchTap", e);
         }
     });
+	return AppBarComponent;
+	
+	
+//	ReactDOM.render(
+//		React.createFactory(AppBarComponent)({show:true}),
+//		  document.getElementById('geppettologo')
+//	);
 	
 	
 	
-	return appBarComponent;
 
 });
