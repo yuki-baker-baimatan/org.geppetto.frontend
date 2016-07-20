@@ -100,8 +100,6 @@ define(function (require) {
             this.customHandlers = [];
             //set class pop up
             $("#" + this.id).addClass("popup");
-            
-            
         },
 
         /**
