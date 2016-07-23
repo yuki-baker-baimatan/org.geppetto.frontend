@@ -30,7 +30,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 
-define(function(require) {
+define(function(require, exports, module) {
 
 // Not needed as tap-event-pluging is embedded together with react and the addons
 //	var injectTapEventPlugin = require("./react-tap-event-plugin");
@@ -45,12 +45,13 @@ define(function(require) {
 	var matui = require('./material-ui');
 	var MuiThemeProvider = matui.MuiThemeProvider;
 	
-	var AppBarComponent = React.createClass({
+	
+	var AppBar = React.createClass({
 
         render: function(){
             return (
         		<MuiThemeProvider>
-        			<matui.AppBar title='Title' iconClassNameRight="muidocs-icon-navigation-expand-more" onTitleTouchTap={this.handleTouchTap} onClick={this.handleClick}/>
+        			<matui.AppBar title={this.props.title} iconClassNameRight="muidocs-icon-navigation-expand-more" onTitleTouchTap={this.props.handleTouchTap} onClick={this.props.handleClick}/>
         		</MuiThemeProvider>	
     		);
         },
@@ -63,15 +64,28 @@ define(function(require) {
             console.log("touchTap", e);
         }
     });
-	return AppBarComponent;
-	
-	
-//	ReactDOM.render(
-//		React.createFactory(AppBarComponent)({show:true}),
-//		  document.getElementById('geppettologo')
-//	);
-	
-	
-	
+    
+    var RaisedButton = React.createClass({
 
+        render: function(){
+            return (
+        		<MuiThemeProvider>
+        			<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
+        		</MuiThemeProvider>	
+    		);
+        },
+        
+        handleClick: function(e) {
+            console.log("click", e);
+        },
+
+        handleTouchTap: function(e) {
+            console.log("touchTap", e);
+        }
+    });
+    
+    module.exports= {
+    	AppBar: AppBar,
+    	RaisedButton: RaisedButton
+    }
 });

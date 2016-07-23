@@ -42,5 +42,25 @@ define(function (require) {
 			GEPPETTO.ComponentFactory.addComponent('LOADINGSPINNER', {show : true, keyboard : false, text: label, logo: "gpt-gpt_logo"}, document.getElementById("modal-region"));	
 		});
 		
+		
+		//Function to illustrate how panel component works
+		GEPPETTO.showingPanelConcept = function(){
+			var handleClick = function(){
+				console.log('handling click');
+			};
+			var handleTouchTap = function(){
+				console.log('handling touch tap');
+			};
+			
+			var panelChildren = [];
+			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('APPBAR',{id:'appBar', title:'App Bar',  handleClick: handleClick, handleTouchTap: handleTouchTap}));
+			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:'raisedButton', label:'OK', handleClick: handleClick}));
+			
+			var panelComponent = GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control"});
+			panelComponent.addChildren(panelChildren);
+		};
+		
+		GEPPETTO.showingPanelConcept();
+		
 	};
 });

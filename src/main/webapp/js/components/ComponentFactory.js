@@ -40,6 +40,8 @@ define(function (require) {
 		var panelComp = require('jsx!components/dev/panel/Panel');
 		var logoComp = require('jsx!components/dev/logo/Logo');
 		var loadingSpinner = require('jsx!./loadingspinner/LoadingSpinner');
+		var AppBarComp = require('jsx!components/dev/material_ui/MaterialUI').AppBar;
+		var RaisedButtonComp = require('jsx!components/dev/material_ui/MaterialUI').RaisedButton;
 		
 		GEPPETTO.ComponentFactory = {
 			getComponent: function(component, properties){
@@ -55,6 +57,12 @@ define(function (require) {
 				}
 				else if (component == 'LOADINGSPINNER'){
 					return React.createFactory(loadingSpinner)(properties);
+				}
+				else if (component == 'APPBAR'){
+					return React.createFactory(AppBarComp)(properties);
+				}
+				else if (component == 'RAISEDBUTTON'){
+					return React.createFactory(RaisedButtonComp)(properties);
 				}
 			},
 			
