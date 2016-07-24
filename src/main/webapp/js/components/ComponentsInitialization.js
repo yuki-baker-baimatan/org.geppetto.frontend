@@ -56,8 +56,9 @@ define(function (require) {
 			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('APPBAR',{id:'appBar', title:'App Bar',  handleClick: handleClick, handleTouchTap: handleTouchTap}));
 			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:'raisedButton', label:'OK', handleClick: handleClick}));
 			
-			var panelComponent = GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control"});
-			panelComponent.addChildren(panelChildren);
+//			var panelComponent = GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control"});
+//			panelComponent.addChildren(panelChildren);
+			GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControlInit", name:"Run Control", items: panelChildren});
 		};
 		
 		GEPPETTO.showingPanelConcept();

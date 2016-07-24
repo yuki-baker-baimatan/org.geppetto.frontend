@@ -11,12 +11,12 @@ define(function(require, exports, module) {
 	var PanelView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
+	        this.componentItems = [];
+//	        this.component = this.getComponent();
 	    },
 
-	    component: function () {
-	        return new PanelComp(
-	          {id: "RunControl", name:"Run Control"}
-	        );
+	    getComponent: function () {
+	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: this.componentItems});
 	    },
 
 	    createFloatingPanel: function (component){
@@ -61,27 +61,48 @@ define(function(require, exports, module) {
 	        return dialog.get(0);
 	    },
 	    
-        set_kk: function(model){
-        	return this.create_child_view(model).then(function(view) {
-        		console.log(view);
-        	});
-        },
+//	    set_Items: function(model){
+//        	return this.create_child_view(model).then(function(view) {
+//        		this.component.addChildren([view.getComponent()]);
+//        	});
+//        },
 	    
+        add_item: function(model){
+        	var that = this;
+        	return this.create_child_view(model)
+	            .then(function(view) {
+//	              that.fig_axes.node().appendChild(view.el.node());
+//	              that.displayed.then(function() {
+//	                  view.trigger("displayed");
+//	              });
+	            	//that.component.addChildren([view.getComponent()]);
+	            	that.componentItems.push(view.getComponent());
+	              return view;
+	          });
+        },
+        
 	    // Render the view.
 	    render: function() {
-	    	var kk_promise = this.set_kk(this.model.get("kk"));
+//	    	var items_promise = this.set_Items(this.model.get("items"));
+	    	var that = this;
 	    	
-	    	
-	    	console.log("kk_promise");
-	    	console.log(kk_promise);
-	        console.log(this.model.get('items'));
-	        console.log(this.model.get('kk'));
-	        console.log(this.model.get('value'));
+	    	this.items = new jupyter_widgets.ViewList(this.add_item, null, this);
+            this.items.update(this.model.get("items"));
+            
+            
+            Promise.all(this.items.views).then(function(views) {
+            	console.log(that.items);
+            	console.log(that.componentItems);
+            	
+//            	that.component = that.getComponent();
+//    	        var floatingPanel = that.createFloatingPanel(that.component);
+//    	        ReactDOM.render(that.component, that.el);
+    	        
+    	        
+    	        GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
+    	        this.$el = $("#RunControl");
+            });
 	        
-	        
-	        var comp = React.createFactory(PanelComp)({id: "RunControl", name:"Run Control"});
-	        var floatingPanel = this.createFloatingPanel(comp);
-	        ReactDOM.render(comp, this.el);
 	        
 	    }
 	});
@@ -93,15 +114,12 @@ define(function(require, exports, module) {
             _model_module: "panel",
             _view_module: "panel",
 
-            kk: undefined,
-            value: 'taka',
             items: [],
         }),
         
         initialize: function() {
         	PanelModel.__super__.initialize.apply(this);
         	this.on('change:items', this.value_changed, this);
-	        this.on('change:value', this.value_changed, this);
         	
 //            this.on("change:side", this.validate_orientation, this);
 //            this.on("change:orientation", this.validate_side, this);
@@ -109,82 +127,37 @@ define(function(require, exports, module) {
 //            this.validate_side();
         },
         value_changed: function() {
-            console.log('pakio');
-            console.log(this.model.get('items'));
-            console.log(this.model.get('value'));
+            console.log('changing items');
+            console.log(this.get('items'));
          },
 	}, {
         serializers: _.extend({
-            kk: { deserialize: jupyter_widgets.unpack_models },
             items: { deserialize: jupyter_widgets.unpack_models },
         }, jupyter_widgets.WidgetModel.serializers)
     });
 	
 	
-	var RaisedButtonView = jupyter_widgets.DOMWidgetView.extend({
+	var RaisedButtonView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
+	        
 	    },
 
-	    component: function () {
-	        return new PanelComp(
-	          {id: "RunControl", name:"Run Control"}
-	        );
+	    getComponent: function () {
+	        return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id')});
 	    },
 
-	    createFloatingPanel: function (component){
-	        var containerId = component.props.id + "_container";
-	        var containerName = component.props.name;
-
-	        //create the dialog window for the widget
-	        var dialog = $("<div id=" + containerId + " class='dialog' title='" + containerName + "'></div>").dialog(
-	        {
-	            resizable: true,
-	            draggable: true,
-	            top: 10,
-	            height: 300,
-	            width: 350,
-	            close: function (event, ui) {
-	                if (event.originalEvent &&
-	                $(event.originalEvent.target).closest(".ui-dialog-titlebar-close").length) {
-	                	$("#" + this.id).remove();
-	                }
-	            },
-	            appendTo: ""
-	        });
-
-	        this.$el = $("#" + this.id);
-
-	        var dialogParent = dialog.parent();
-	        var that = this;
-
-	        //add history
-	        dialogParent.find("div.ui-dialog-titlebar").prepend("<div class='fa fa-history historyIcon'></div>");
-	        dialogParent.find("div.historyIcon").click(function (event) {
-	            that.showHistoryMenu(event);
-	            event.stopPropagation();
-	        });
-
-	        //remove the jQuery UI icon
-	        dialogParent.find("button.ui-dialog-titlebar-close").html("");
-	        dialogParent.find("button").append("<i class='fa fa-close'></i>");
-	        //Take focus away from close button
-	        dialogParent.find("button.ui-dialog-titlebar-close").blur();	
-
-	        return dialog.get(0);
-	    },
-	    
 	    // Render the view.
 	    render: function() {
 	       console.log('raisedButton');
-	       console.log(this.model.get('value'));
+	       console.log(this.model.get('widget_id'));
 	        
-	       
-	       var comp = React.createFactory(PanelComp)({id: "ESEbuttonbueno", name:"ESEbuttonbueno"});
-	       var floatingPanel = this.createFloatingPanel(comp);
-	        ReactDOM.render(comp, this.el);
+//	       var floatingPanel = this.createFloatingPanel(comp);
+	      //  ReactDOM.render(this.getComponent(), this.el);
 	    }
 	});
+	
+	
 	
 	module.exports= {
 		PanelView: PanelView,
