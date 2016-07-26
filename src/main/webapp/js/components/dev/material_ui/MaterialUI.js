@@ -54,14 +54,6 @@ define(function(require, exports, module) {
         			<matui.AppBar title={this.props.title} iconClassNameRight="muidocs-icon-navigation-expand-more" onTitleTouchTap={this.props.handleTouchTap} onClick={this.props.handleClick}/>
         		</MuiThemeProvider>	
     		);
-        },
-        
-        handleClick: function(e) {
-            console.log("click", e);
-        },
-
-        handleTouchTap: function(e) {
-            console.log("touchTap", e);
         }
     });
     
@@ -73,19 +65,23 @@ define(function(require, exports, module) {
         			<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
         		</MuiThemeProvider>	
     		);
-        },
-        
-        handleClick: function(e) {
-            console.log("click", e);
-        },
+        }
+    });
+    
+    var TextField = React.createClass({
 
-        handleTouchTap: function(e) {
-            console.log("touchTap", e);
+        render: function(){
+            return (
+        		<MuiThemeProvider>
+        			<matui.TextField hintText={this.props.hintText}/>
+        		</MuiThemeProvider>	
+    		);
         }
     });
     
     module.exports= {
     	AppBar: AppBar,
-    	RaisedButton: RaisedButton
+    	RaisedButton: RaisedButton,
+    	TextField: TextField
     }
 });

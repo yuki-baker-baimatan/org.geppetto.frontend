@@ -125,24 +125,26 @@ define(function(require, exports, module) {
     });
 	
 	
-	var RaisedButtonView = jupyter_widgets.WidgetView.extend({
+	var ComponentView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
-	        RaisedButtonView.__super__.initialize.apply(this, arguments);
+	        ComponentView.__super__.initialize.apply(this, arguments);
 	    },
 
 	    handleClick: function (view) {
-	    	view.send({event: 'click'});
+	    	var data = {info : 'data sent'}; 
+	    	view.send({event: 'click', data: data});
 	    },
 	    
 	    getComponent: function () {
-	        return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
+	    	return GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
+	        //return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
 	    	//return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id')});
 	    },
 
 	    // Render the view.
 	    render: function() {
-	       console.log('raisedButton');
+	       console.log('component view');
 	       console.log(this.model.get('widget_id'));
 //	       var floatingPanel = this.createFloatingPanel(comp);
 	      //  ReactDOM.render(this.getComponent(), this.el);
@@ -152,6 +154,6 @@ define(function(require, exports, module) {
 	module.exports= {
 		PanelView: PanelView,
 		PanelModel: PanelModel,
-		RaisedButtonView: RaisedButtonView
+		ComponentView: ComponentView
     };
 });

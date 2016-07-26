@@ -42,6 +42,7 @@ define(function (require) {
 		var loadingSpinner = require('jsx!./loadingspinner/LoadingSpinner');
 		var AppBarComp = require('jsx!components/dev/material_ui/MaterialUI').AppBar;
 		var RaisedButtonComp = require('jsx!components/dev/material_ui/MaterialUI').RaisedButton;
+		var TextFieldComp = require('jsx!components/dev/material_ui/MaterialUI').TextField;
 		
 		GEPPETTO.ComponentFactory = {
 			getComponent: function(component, properties){
@@ -63,6 +64,9 @@ define(function (require) {
 				}
 				else if (component == 'RAISEDBUTTON'){
 					return React.createFactory(RaisedButtonComp)(properties);
+				}
+				else if (component == 'TEXTFIELD'){
+					return React.createFactory(TextFieldComp)(properties);
 				}
 			},
 			
