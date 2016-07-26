@@ -12,9 +12,10 @@ define(function(require, exports, module) {
 	    initialize: function (options) {
 	        this.options = options || {};
 	        this.componentItems = [];
-//	        this.component = this.getComponent();
+	        
+	        PanelView.__super__.initialize.apply(this, arguments);
 	    },
-
+	    
 	    getComponent: function () {
 	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: this.componentItems});
 	    },
@@ -61,28 +62,24 @@ define(function(require, exports, module) {
 	        return dialog.get(0);
 	    },
 	    
-//	    set_Items: function(model){
-//        	return this.create_child_view(model).then(function(view) {
-//        		this.component.addChildren([view.getComponent()]);
-//        	});
-//        },
-	    
         add_item: function(model){
         	var that = this;
         	return this.create_child_view(model)
 	            .then(function(view) {
-//	              that.fig_axes.node().appendChild(view.el.node());
-//	              that.displayed.then(function() {
-//	                  view.trigger("displayed");
-//	              });
-	            	//that.component.addChildren([view.getComponent()]);
 	            	that.componentItems.push(view.getComponent());
 	              return view;
 	          });
         },
         
+        value_changed: function() {
+        	console.log('jesulin');
+        	console.log(this.model.get('value'));
+        },
+        
 	    // Render the view.
 	    render: function() {
+	    	this.value_changed();
+	    	
 //	    	var items_promise = this.set_Items(this.model.get("items"));
 	    	var that = this;
 	    	
@@ -91,19 +88,15 @@ define(function(require, exports, module) {
             
             
             Promise.all(this.items.views).then(function(views) {
-            	console.log(that.items);
-            	console.log(that.componentItems);
             	
 //            	that.component = that.getComponent();
 //    	        var floatingPanel = that.createFloatingPanel(that.component);
 //    	        ReactDOM.render(that.component, that.el);
     	        
-    	        
     	        GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
     	        this.$el = $("#RunControl");
+    	        
             });
-	        
-	        
 	    }
 	});
 	
@@ -120,11 +113,6 @@ define(function(require, exports, module) {
         initialize: function() {
         	PanelModel.__super__.initialize.apply(this);
         	this.on('change:items', this.value_changed, this);
-        	
-//            this.on("change:side", this.validate_orientation, this);
-//            this.on("change:orientation", this.validate_side, this);
-//            this.validate_orientation();
-//            this.validate_side();
         },
         value_changed: function() {
             console.log('changing items');
@@ -140,24 +128,26 @@ define(function(require, exports, module) {
 	var RaisedButtonView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
-	        
+	        RaisedButtonView.__super__.initialize.apply(this, arguments);
 	    },
 
+	    handleClick: function (view) {
+	    	view.send({event: 'click'});
+	    },
+	    
 	    getComponent: function () {
-	        return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id')});
+	        return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
+	    	//return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id')});
 	    },
 
 	    // Render the view.
 	    render: function() {
 	       console.log('raisedButton');
 	       console.log(this.model.get('widget_id'));
-	        
 //	       var floatingPanel = this.createFloatingPanel(comp);
 	      //  ReactDOM.render(this.getComponent(), this.el);
 	    }
 	});
-	
-	
 	
 	module.exports= {
 		PanelView: PanelView,
