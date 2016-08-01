@@ -79,9 +79,23 @@ define(function(require, exports, module) {
         }
     });
     
+    var ButtonTextField = React.createClass({
+
+        render: function(){
+            return (
+        		<MuiThemeProvider>
+    				<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
+    				<matui.TextField type="number" hintText={this.props.hintText}/>
+        		</MuiThemeProvider>	
+    		);
+        }
+    });
+
+    
     module.exports= {
     	AppBar: AppBar,
     	RaisedButton: RaisedButton,
+    	ButtonTextField: ButtonTextField,
     	TextField: TextField
     }
 });

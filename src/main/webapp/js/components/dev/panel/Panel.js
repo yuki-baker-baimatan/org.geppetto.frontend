@@ -80,7 +80,7 @@ define(function (require) {
     		 });
         	 
              return (
-        		 <div className="panelContainer" style={this.props.parentStyle}>
+        		 <div className="panelContainer" id={this.props.id} style={this.props.parentStyle}>
         		 	{itemComponents}
         		 </div>
              );

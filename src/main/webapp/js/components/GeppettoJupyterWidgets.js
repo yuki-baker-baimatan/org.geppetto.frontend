@@ -16,10 +16,6 @@ define(function(require, exports, module) {
 	        PanelView.__super__.initialize.apply(this, arguments);
 	    },
 	    
-	    getComponent: function () {
-	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: this.componentItems});
-	    },
-
 	    createFloatingPanel: function (component){
 	        var containerId = component.props.id + "_container";
 	        var containerName = component.props.name;
@@ -64,11 +60,22 @@ define(function(require, exports, module) {
 	    
         add_item: function(model){
         	var that = this;
+//        	return this.create_child_view(model)
+//	            .then(function(view) {
+//	            	//that.componentItems.push(view.getComponent());
+//	            	view.getComponent().then(function(component) {
+//	            		that.componentItems.push(component);
+//	            	});
+//	            	return view;
+//	            	});
+        	
         	return this.create_child_view(model)
-	            .then(function(view) {
-	            	that.componentItems.push(view.getComponent());
-	              return view;
-	          });
+            .then(function(view){
+            	return view.getComponent();
+            })
+            .then(function(component) {
+        		that.componentItems.push(component);
+        	});
         },
         
         value_changed: function() {
@@ -76,27 +83,47 @@ define(function(require, exports, module) {
         	console.log(this.model.get('value'));
         },
         
+        getComponent: function () {
+//	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: this.componentItems});
+	        
+	        var that = this;
+            return Promise.all(this.items.views).then(function(views) {
+    	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
+            });
+	    },
+        
 	    // Render the view.
 	    render: function() {
 	    	this.value_changed();
+	    	//Serialize single instance
+	    	//var items_promise = this.set_Items(this.model.get("items"));
 	    	
-//	    	var items_promise = this.set_Items(this.model.get("items"));
-	    	var that = this;
 	    	
 	    	this.items = new jupyter_widgets.ViewList(this.add_item, null, this);
             this.items.update(this.model.get("items"));
+
+            var that = this;
+//            Promise.all(this.items.views).then(function(views) {
+//	            GEPPETTO.ComponentFactory.renderComponent(that.getComponent());
+//	            this.$el = $("#RunControl");
+//            });    
             
-            
-            Promise.all(this.items.views).then(function(views) {
-            	
-//            	that.component = that.getComponent();
-//    	        var floatingPanel = that.createFloatingPanel(that.component);
-//    	        ReactDOM.render(that.component, that.el);
-    	        
-    	        GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
-    	        this.$el = $("#RunControl");
-    	        
-            });
+            if (this.model.get("embedded") == false){
+            	this.getComponent().then(function(component) {
+            		GEPPETTO.ComponentFactory.renderComponent(component);
+            		this.$el = $("#RunControl");
+            	});
+            }
+//            var that = this;
+//            Promise.all(this.items.views).then(function(views) {
+////            	that.component = that.getComponent();
+////    	        var floatingPanel = that.createFloatingPanel(that.component);
+////    	        ReactDOM.render(that.component, that.el);
+//    	        
+//    	        GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
+//    	        this.$el = $("#RunControl");
+//    	        
+//            });
 	    }
 	});
 	
@@ -137,9 +164,12 @@ define(function(require, exports, module) {
 	    },
 	    
 	    getComponent: function () {
-	    	return GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
-	        //return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id'), handleClick: this.handleClick.bind(null, this)});
-	    	//return GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:this.model.get('widget_id'), label:this.model.get('widget_id')});
+//	    	var that = this;
+//	    	return new Promise(function(resolve) {
+//    	        return GEPPETTO.ComponentFactory.getComponent(that.model.get('component_name'),{id:that.model.get('widget_id'), label:that.model.get('widget_name'), parentStyle:that.model.get('parentStyle'), handleClick: that.handleClick.bind(null, that)});
+//            });
+	    	
+	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), handleClick: this.handleClick.bind(null, this)}));
 	    },
 
 	    // Render the view.
