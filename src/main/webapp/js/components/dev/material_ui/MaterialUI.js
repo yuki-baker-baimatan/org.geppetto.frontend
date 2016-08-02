@@ -73,7 +73,7 @@ define(function(require, exports, module) {
         render: function(){
             return (
         		<MuiThemeProvider>
-        			<matui.TextField hintText={this.props.hintText}/>
+        			<matui.TextField id={this.props.id} hintText={this.props.hintText}/>
         		</MuiThemeProvider>	
     		);
         }

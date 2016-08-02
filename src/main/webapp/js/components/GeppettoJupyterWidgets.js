@@ -16,48 +16,6 @@ define(function(require, exports, module) {
 	        PanelView.__super__.initialize.apply(this, arguments);
 	    },
 	    
-	    createFloatingPanel: function (component){
-	        var containerId = component.props.id + "_container";
-	        var containerName = component.props.name;
-
-	        //create the dialog window for the widget
-	        var dialog = $("<div id=" + containerId + " class='dialog' title='" + containerName + "'></div>").dialog(
-	        {
-	            resizable: true,
-	            draggable: true,
-	            top: 10,
-	            height: 300,
-	            width: 350,
-	            close: function (event, ui) {
-	                if (event.originalEvent &&
-	                $(event.originalEvent.target).closest(".ui-dialog-titlebar-close").length) {
-	                	$("#" + this.id).remove();
-	                }
-	            },
-	            appendTo: ""
-	        });
-
-	        this.$el = $("#" + this.id);
-
-	        var dialogParent = dialog.parent();
-	        var that = this;
-
-	        //add history
-	        dialogParent.find("div.ui-dialog-titlebar").prepend("<div class='fa fa-history historyIcon'></div>");
-	        dialogParent.find("div.historyIcon").click(function (event) {
-	            that.showHistoryMenu(event);
-	            event.stopPropagation();
-	        });
-
-	        //remove the jQuery UI icon
-	        dialogParent.find("button.ui-dialog-titlebar-close").html("");
-	        dialogParent.find("button").append("<i class='fa fa-close'></i>");
-	        //Take focus away from close button
-	        dialogParent.find("button.ui-dialog-titlebar-close").blur();	
-
-	        return dialog.get(0);
-	    },
-	    
         add_item: function(model){
         	var that = this;
 //        	return this.create_child_view(model)
@@ -84,11 +42,9 @@ define(function(require, exports, module) {
         },
         
         getComponent: function () {
-//	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: this.componentItems});
-	        
 	        var that = this;
             return Promise.all(this.items.views).then(function(views) {
-    	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: "RunControl", name:"Run Control", items: that.componentItems});
+    	        return GEPPETTO.ComponentFactory.getComponent('PANEL', {id: that.model.get('widget_id'), name: that.model.get('widget_name'), items: that.componentItems, parentStyle: that.model.get('parentStyle')});
             });
 	    },
         
@@ -135,6 +91,8 @@ define(function(require, exports, module) {
             _view_module: "panel",
 
             items: [],
+            parentStyle: {parentStyle : 'row'}
+            
         }),
         
         initialize: function() {

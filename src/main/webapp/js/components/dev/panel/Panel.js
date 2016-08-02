@@ -45,24 +45,25 @@ define(function (require) {
 	//http://blog.krawaller.se/posts/a-react-app-demonstrating-css3-flexbox/
 	//http://jaketrent.com/post/send-props-to-children-react/
 	
-	var defaultParentStyle = {'flexDirection':'column','justifyContent':'flex-start','alignItems':'flex-start','flexWrap':'nowrap','alignContent':'flex-start'};
 	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0, 'display': 'inline-block'};
 	
 	var panelComponent = React.createClass({
 		
 		getInitialState: function() {
-            return {
-            	parentStyle: this.props.parentStyle,
+			var defaultParentStyle = {'flexDirection':'column','justifyContent':'flex-start','alignItems':'flex-start','flexWrap':'nowrap','alignContent':'flex-start'};
+			
+			return {
+            	parentStyle: $.extend(defaultParentStyle, this.props.parentStyle),
             	items: this.props.items
             };
         },
         
-        getDefaultProps: function(){
-        	return {
-            	parentStyle: defaultParentStyle,
-            	items: []
-            };
-        },
+//        getDefaultProps: function(){
+//        	return {
+//            	parentStyle: defaultParentStyle,
+//            	items: []
+//            };
+//        },
         
         addChildren: function(items){
         	this.setState({ items: this.state.items.concat(items) });
@@ -80,7 +81,7 @@ define(function (require) {
     		 });
         	 
              return (
-        		 <div className="panelContainer" id={this.props.id} style={this.props.parentStyle}>
+        		 <div className="panelContainer" id={this.props.id} style={this.state.parentStyle}>
         		 	{itemComponents}
         		 </div>
              );
