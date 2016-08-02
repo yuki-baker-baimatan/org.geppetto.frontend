@@ -122,5 +122,17 @@ define(function (require) {
 		GEPPETTO.on('show_spinner', function(label) {
 			GEPPETTO.ComponentFactory.addComponent('LOADINGSPINNER', {show : true, keyboard : false, text: label, logo: "gpt-osb"}, document.getElementById("modal-region"));	
 		});
+		
+		//Save initialization 
+		GEPPETTO.ComponentFactory.addComponent('SAVECONTROL', {}, document.getElementById("SaveButton"));
+
+		//Control panel initialization
+		GEPPETTO.ComponentFactory.addComponent('CONTROLPANEL', {}, document.getElementById("controlpanel"));
+
+		//Spotlight initialization
+		GEPPETTO.ComponentFactory.addComponent('SPOTLIGHT', {}, document.getElementById("spotlight"));
+
+		//Spotlight initialization
+		GEPPETTO.ComponentFactory.addComponent('FOREGROUND', {}, document.getElementById("foreground-toolbar"));
 	};
 });

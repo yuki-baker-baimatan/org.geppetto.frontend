@@ -39,7 +39,11 @@ define(function (require) {
 		var formComp = require('jsx!components/dev/form/Form');
 		var panelComp = require('jsx!components/dev/panel/Panel');
 		var logoComp = require('jsx!components/dev/logo/Logo');
-		var loadingSpinner = require('jsx!./loadingspinner/LoadingSpinner');
+		var loadingSpinnerComp = require('jsx!./loadingspinner/LoadingSpinner');
+		var saveControlComp = require('jsx!components/dev/save/SaveControl');
+		var controlPanelComp = require('jsx!components/dev/controlpanel/controlpanel');
+		var spotlightComp = require('jsx!components/dev/spotlight/spotlight');
+		var foregroundControlsComp = require('jsx!components/dev/foregroundcontrols/ForegroundControls');
 		var AppBarComp = require('jsx!components/dev/material_ui/MaterialUI').AppBar;
 		var RaisedButtonComp = require('jsx!components/dev/material_ui/MaterialUI').RaisedButton;
 		var TextFieldComp = require('jsx!components/dev/material_ui/MaterialUI').TextField;
@@ -57,7 +61,19 @@ define(function (require) {
 					return React.createFactory(logoComp)(properties);
 				}
 				else if (component == 'LOADINGSPINNER'){
-					return React.createFactory(loadingSpinner)(properties);
+					return React.createFactory(loadingSpinnerComp)(properties);
+				}
+				else if (component == 'SAVECONTROL'){
+					return React.createFactory(saveControlComp)(properties);
+				}
+				else if (component == 'CONTROLPANEL'){
+					return React.createFactory(controlPanelComp)(properties);
+				}
+				else if (component == 'SPOTLIGHT'){
+					return React.createFactory(spotlightComp)(properties);
+				}
+				else if (component == 'FOREGROUND'){
+					return React.createFactory(foregroundControlsComp)(properties);
 				}
 				else if (component == 'APPBAR'){
 					return React.createFactory(AppBarComp)(properties);
