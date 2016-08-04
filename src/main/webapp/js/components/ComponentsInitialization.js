@@ -43,8 +43,23 @@ define(function (require) {
 		//Spotlight initialization
 		GEPPETTO.ComponentFactory.addComponent('SPOTLIGHT', {}, document.getElementById("spotlight"));
 
-		//Spotlight initialization
+		//Foreground initialization
 		GEPPETTO.ComponentFactory.addComponent('FOREGROUND', {}, document.getElementById("foreground-toolbar"));
+
+		//Experiments table initialization
+		GEPPETTO.ComponentFactory.addComponent('EXPERIMENTSTABLE', {}, document.getElementById("experiments"));
+
+		//Home button initialization
+		GEPPETTO.ComponentFactory.addComponent('HOME', {}, document.getElementById("HomeButton"));
+
+		//Simulation controls initialization
+		GEPPETTO.ComponentFactory.addComponent('SIMULATIONCONTROLS', {}, document.getElementById("sim-toolbar"));
+
+		//Camera controls initialization
+		GEPPETTO.ComponentFactory.addComponent('CAMERACONTROLS', {}, document.getElementById("camera-controls"));
+
+		//Camera controls initialization
+		GEPPETTO.ComponentFactory.addComponent('SHARE', {}, document.getElementById("share-button"));
 		
 		//Loading spinner initialization
 		GEPPETTO.on('show_spinner', function(label) {
