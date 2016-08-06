@@ -45,12 +45,13 @@ define(function (require) {
 	//http://blog.krawaller.se/posts/a-react-app-demonstrating-css3-flexbox/
 	//http://jaketrent.com/post/send-props-to-children-react/
 	
-	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0, 'display': 'inline-block'};
+//	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0, 'display': 'inline-block'};
+	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0};
 	
 	var panelComponent = React.createClass({
 		
 		getInitialState: function() {
-			var defaultParentStyle = {'flexDirection':'column','justifyContent':'flex-start','alignItems':'flex-start','flexWrap':'nowrap','alignContent':'flex-start'};
+			var defaultParentStyle = {'flexDirection':'column','justifyContent':'flex-start','alignItems':'flex-start','flexWrap':'nowrap','alignContent':'flex-start','display':'flex'};
 			
 			return {
             	parentStyle: $.extend(defaultParentStyle, this.props.parentStyle),

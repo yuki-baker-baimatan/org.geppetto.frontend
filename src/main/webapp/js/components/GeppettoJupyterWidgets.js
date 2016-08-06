@@ -90,8 +90,7 @@ define(function(require, exports, module) {
             _model_module: "panel",
             _view_module: "panel",
 
-            items: [],
-            parentStyle: {parentStyle : 'row'}
+            items: []
             
         }),
         
