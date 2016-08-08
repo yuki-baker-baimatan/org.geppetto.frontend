@@ -3,7 +3,6 @@ define(function(require, exports, module) {
 	var React = require('react');
 	var PanelComp = require('jsx!components/dev/panel/Panel');
 	var ReactDOM = require('react-dom');
-//	var Widget = require('widgets/JupyterWidget');
 	//var $jParent = window.parent.jQuery.noConflict();
 	require('vendor/jupyter/jupyter_widgets');
 	var $ = require('jquery');
@@ -36,11 +35,6 @@ define(function(require, exports, module) {
         	});
         },
         
-        value_changed: function() {
-        	console.log('jesulin');
-        	console.log(this.model.get('value'));
-        },
-        
         getComponent: function () {
 	        var that = this;
             return Promise.all(this.items.views).then(function(views) {
@@ -50,20 +44,13 @@ define(function(require, exports, module) {
         
 	    // Render the view.
 	    render: function() {
-	    	this.value_changed();
 	    	//Serialize single instance
 	    	//var items_promise = this.set_Items(this.model.get("items"));
-	    	
 	    	
 	    	this.items = new jupyter_widgets.ViewList(this.add_item, null, this);
             this.items.update(this.model.get("items"));
 
             var that = this;
-//            Promise.all(this.items.views).then(function(views) {
-//	            GEPPETTO.ComponentFactory.renderComponent(that.getComponent());
-//	            this.$el = $("#RunControl");
-//            });    
-            
             if (this.model.get("embedded") == false){
             	this.getComponent().then(function(component) {
             		GEPPETTO.ComponentFactory.renderComponent(component);
@@ -108,6 +95,25 @@ define(function(require, exports, module) {
         }, jupyter_widgets.WidgetModel.serializers)
     });
 	
+	var ComponentModel = jupyter_widgets.WidgetModel.extend({
+		defaults: _.extend({}, jupyter_widgets.WidgetModel.prototype.defaults, {
+	        _model_name: 'ComponentModel',
+	        _view_name: 'ComponentView',
+	        _model_module: "component",
+            _view_module: "component",
+            
+            sync_value: 0
+	    }),
+	    
+	    initialize: function() {
+	    	ComponentModel.__super__.initialize.apply(this);
+	    	this.on('change:sync_value', this.value_changed, this);
+        },
+        value_changed: function() {
+            console.log('changing jar');
+            console.log(this.get('sync_value'));
+         },
+	})
 	
 	var ComponentView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
@@ -121,26 +127,19 @@ define(function(require, exports, module) {
 	    },
 	    
 	    getComponent: function () {
-//	    	var that = this;
-//	    	return new Promise(function(resolve) {
-//    	        return GEPPETTO.ComponentFactory.getComponent(that.model.get('component_name'),{id:that.model.get('widget_id'), label:that.model.get('widget_name'), parentStyle:that.model.get('parentStyle'), handleClick: that.handleClick.bind(null, that)});
-//            });
-	    	
 	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), handleClick: this.handleClick.bind(null, this)}));
 	    },
 
 	    // Render the view.
 	    render: function() {
 	       console.log('component view');
-	       console.log(this.model.get('widget_id'));
-//	       var floatingPanel = this.createFloatingPanel(comp);
-	      //  ReactDOM.render(this.getComponent(), this.el);
 	    }
 	});
 	
 	module.exports= {
 		PanelView: PanelView,
 		PanelModel: PanelModel,
-		ComponentView: ComponentView
+		ComponentView: ComponentView,
+		ComponentModel: ComponentModel
     };
 });
