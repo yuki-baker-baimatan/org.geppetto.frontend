@@ -85,7 +85,7 @@ define(function (require) {
 			GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControlInit", name:"Run Control", items: panelChildren});
 		};
 		
-		GEPPETTO.showingPanelConcept();
+		//GEPPETTO.showingPanelConcept();
 		
 	};
 });

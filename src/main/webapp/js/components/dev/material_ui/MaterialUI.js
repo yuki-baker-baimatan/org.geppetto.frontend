@@ -58,28 +58,45 @@ define(function(require, exports, module) {
     });
     
     var RaisedButton = React.createClass({
-
-        render: function(){
+    	render: function(){
             return (
-        		<MuiThemeProvider>
-        			<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
-        		</MuiThemeProvider>	
-    		);
+            		<input type="button" onClick={this.props.handleClick} value={this.props.label} />
+            );
         }
+    	
+//        render: function(){
+//            return (
+//        		<MuiThemeProvider>
+//        			<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
+//        		</MuiThemeProvider>	
+//    		);
+//        }
     });
     
     var TextField = React.createClass({
-
-        render: function(){
-            return (
-        		<MuiThemeProvider>
-        			<matui.TextField id={this.props.id} hintText={this.props.hintText}/>
-        		</MuiThemeProvider>	
-    		);
-        }
+    	
+	
+    render: function(){
+        return (
+    		<input type="textfield" id={this.props.id} value={this.props.sync_value}/>
+		);
+    }
+  	
+//    	changeHintText: function(){
+//    			console.log('taka');
+//    	},
+//    	
+//        render: function(){
+//            return (
+//        		<MuiThemeProvider>
+//        			<matui.TextField id={this.props.id} hintText={this.props.hintText} value={this.props.sync_value}/>
+//        		</MuiThemeProvider>	
+//    		);
+//        }
     });
     
     var ButtonTextField = React.createClass({
+    	
 
         render: function(){
             return (

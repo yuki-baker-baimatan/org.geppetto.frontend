@@ -48,6 +48,13 @@ define(function (require) {
 //	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0, 'display': 'inline-block'};
 	var defaultChildStyle = {'alignSelf': 'auto', 'flexGrow': 0, 'order': 0};
 	
+//	var childComponent = React.createClass({
+//		render: function(){
+//			return (<div key={this.props.id} style={this.props.defaultChildStyle}>{child}</div>);
+//
+//        }
+//	})	
+	
 	var panelComponent = React.createClass({
 		
 		getInitialState: function() {
@@ -70,6 +77,17 @@ define(function (require) {
         	this.setState({ items: this.state.items.concat(items) });
         },
         
+        changeValue: function(id, value){
+        	console.log(id)
+        	console.log(value)
+        	console.log(this.state.items);
+        },
+        
+        setChildren: function(items){
+        	this.setState({ items: items });
+        	this.forceUpdate();
+        },
+        
         setDirection: function(direction){
         	var currentStyle = this.state.parentStyle;
         	currentStyle['flexDirection'] = direction;
@@ -77,10 +95,20 @@ define(function (require) {
         },
 		
          render: function(){
-        	 var itemComponents = this.state.items.map(function (item) {		            			 
-    			 return (<div key={item.props.id} style={defaultChildStyle}>{item}</div>);
-    		 });
+//        	 var itemComponents = this.state.items.map(function (item) {		            			 
+//    			 return (<div key={item.props.id} style={defaultChildStyle}>{item}</div>);
+//    		 });
+        	 var itemComponents = this.state.items.map(function (item) {	
+//        		 var taka = React.cloneElement(item);
+//				 return (<div key={taka.props.id} style={defaultChildStyle} data-mierdumen={taka.props.sync_value}>{taka}</div>);
+//        		 if (item.props.sync_value == undefined || item.type.displayName == 'RaisedButton'){
+        			 var taka = React.cloneElement(item);
+    				 return (<div key={taka.props.id} style={defaultChildStyle} data-mierdumen={taka.props.sync_value}>{taka}</div>);	 
+//        		 }
+//        		 return (<div key={item.props.id} style={defaultChildStyle} data-mierdumen={item.props.sync_value}>{item.props.sync_value}</div>);
+			 });
         	 
+       	 
              return (
         		 <div className="panelContainer" id={this.props.id} style={this.state.parentStyle}>
         		 	{itemComponents}
