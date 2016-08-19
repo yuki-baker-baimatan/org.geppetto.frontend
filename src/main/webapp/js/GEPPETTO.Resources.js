@@ -96,7 +96,7 @@ define(function (require) {
 
             /**
              *
-             * Different status an experiment can be on
+             * Different status an experiment can be on and descriptions
              *
              * @enum
              */
@@ -108,6 +108,15 @@ define(function (require) {
                 ERROR: "ERROR",
                 COMPLETED: "COMPLETED",
                 DELETED: "DELETED",
+                Descriptions: {
+                    DESIGN: "The experiment is in <b>DESIGN</b> status. Parameters can be set and state variables can be recorded before running the experiment.",
+                    CANCELED: "The experiment has been <b>CANCELED</b>.",
+                    QUEUED: "The experiment is <b>QUEUED</b> for running.",
+                    RUNNING: "The experiment is currently <b>RUNNING</b>.",
+                    ERROR: "The experiment caused an <b>ERROR</b> while running.",
+                    COMPLETED: "The experiment has successfully <b>COMPLETED</b>. The state variables that were recorded, if any, can now be plotted.",
+                    DELETED: "The experiment is <b>DELETED</b>... and you shouldn't be seeing this message!"
+                }
             },
 
             GeometryTypes: {
@@ -149,7 +158,9 @@ define(function (require) {
             LOADING_PROJECT: "Loading Project",
 
             LOADING_EXPERIMENT: "Loading Experiment",
-
+            
+            RESOLVING_TYPES: "Resolving types",
+                        
             PARSING_MODEL: "Parsing model",
 
             CREATING_MODEL: "Creating model",

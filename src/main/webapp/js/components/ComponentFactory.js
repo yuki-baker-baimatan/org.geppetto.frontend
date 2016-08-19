@@ -39,6 +39,8 @@ define(function (require) {
 		var formComp = require('jsx!components/dev/form/Form');
 		var panelComp = require('jsx!components/dev/panel/Panel');
 		var logoComp = require('jsx!components/dev/logo/Logo');
+		var infoModalComp = require('jsx!components/popups/InfoModal');
+        var mdModalComp = require('jsx!components/popups/MarkDownModal');
 		var loadingSpinnerComp = require('jsx!./loadingspinner/LoadingSpinner');
 		var saveControlComp = require('jsx!components/dev/save/SaveControl');
 		var controlPanelComp = require('jsx!components/dev/controlpanel/controlpanel');
@@ -53,6 +55,7 @@ define(function (require) {
 		var RaisedButtonComp = require('jsx!components/dev/material_ui/MaterialUI').RaisedButton;
 		var TextFieldComp = require('jsx!components/dev/material_ui/MaterialUI').TextField;
 		var CheckboxComp = require('jsx!components/dev/material_ui/MaterialUI').Checkbox;
+		//var queryComp = require('jsx!./dev/query/query');
 		
 		GEPPETTO.ComponentFactory = {
 			getComponent: function(component, properties){
@@ -95,6 +98,15 @@ define(function (require) {
 				}
 				else if (component == 'SHARE'){
 					return React.createFactory(shareComp)(properties);
+				}
+				else if (component == 'INFOMODAL'){
+                    return React.createFactory(infoModalComp)(properties);
+                }
+                else if (component == 'MDMODAL'){
+                    return React.createFactory(mdModalComp)(properties);
+                }
+				else if (component == 'QUERY'){
+					return React.createFactory(queryComp)(properties);
 				}
 				else if (component == 'APPBAR'){
 					return React.createFactory(AppBarComp)(properties);
@@ -139,13 +151,6 @@ define(function (require) {
 	                var dialogParent = dialog.parent();
 	                var that = this;
 	
-	                //add history
-	                dialogParent.find("div.ui-dialog-titlebar").prepend("<div class='fa fa-history historyIcon'></div>");
-	                dialogParent.find("div.historyIcon").click(function (event) {
-	                    that.showHistoryMenu(event);
-	                    event.stopPropagation();
-	                });
-	
 	                //remove the jQuery UI icon
 	                dialogParent.find("button.ui-dialog-titlebar-close").html("");
 	                dialogParent.find("button").append("<i class='fa fa-close'></i>");
@@ -153,6 +158,7 @@ define(function (require) {
 	
 	                //Take focus away from close button
 	                dialogParent.find("button.ui-dialog-titlebar-close").blur();	
+	                dialogParent.css("z-index","10");
 	                
 	                container = dialog.get(0);
 				}
