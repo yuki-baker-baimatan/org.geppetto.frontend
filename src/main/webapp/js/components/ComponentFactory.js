@@ -52,6 +52,7 @@ define(function (require) {
 		var AppBarComp = require('jsx!components/dev/material_ui/MaterialUI').AppBar;
 		var RaisedButtonComp = require('jsx!components/dev/material_ui/MaterialUI').RaisedButton;
 		var TextFieldComp = require('jsx!components/dev/material_ui/MaterialUI').TextField;
+		var CheckboxComp = require('jsx!components/dev/material_ui/MaterialUI').Checkbox;
 		
 		GEPPETTO.ComponentFactory = {
 			getComponent: function(component, properties){
@@ -103,6 +104,9 @@ define(function (require) {
 				}
 				else if (component == 'TEXTFIELD'){
 					return React.createFactory(TextFieldComp)(properties);
+				}
+				else if (component == 'CHECKBOX'){
+					return React.createFactory(CheckboxComp)(properties);
 				}
 			},
 			

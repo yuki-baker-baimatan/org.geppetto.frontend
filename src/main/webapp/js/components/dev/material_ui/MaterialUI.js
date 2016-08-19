@@ -82,9 +82,6 @@ define(function(require, exports, module) {
 		);
     }
   	
-//    	changeHintText: function(){
-//    			console.log('taka');
-//    	},
 //    	
 //        render: function(){
 //            return (
@@ -95,15 +92,10 @@ define(function(require, exports, module) {
 //        }
     });
     
-    var ButtonTextField = React.createClass({
-    	
-
+    var Checkbox = React.createClass({
         render: function(){
             return (
-        		<MuiThemeProvider>
-    				<matui.RaisedButton label={this.props.label} onClick={this.props.handleClick}/>
-    				<matui.TextField type="number" hintText={this.props.hintText}/>
-        		</MuiThemeProvider>	
+            		<input type="checkbox" id={this.props.id} value={this.props.sync_value}/>
     		);
         }
     });
@@ -112,7 +104,7 @@ define(function(require, exports, module) {
     module.exports= {
     	AppBar: AppBar,
     	RaisedButton: RaisedButton,
-    	ButtonTextField: ButtonTextField,
+    	Checkbox: Checkbox,
     	TextField: TextField
     }
 });
