@@ -73,7 +73,7 @@ define(function (require) {
 		
 		$("#github").hide();
         GEPPETTO.on(Events.Model_loaded, function () {
-        	G.setBackgroundColour("#004d40");
+        	G.setBackgroundColour("#3e2723");
         	
         	//trying to hide jupyter header, needs to configure cross origin on jupyter
         	//var header=$("#pyConsoleFrame")[0].contentWindow.document.getElementById("header");
