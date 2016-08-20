@@ -68,6 +68,7 @@ define(function (require) {
 //            kernel.execute(id, takarras);
             
             var nb = $("#pyConsoleFrame")[0].contentWindow.Jupyter.notebook;
+                       
             // create cell below this one
             nb.insert_cell_below();
             // select cell below (the one we have created)

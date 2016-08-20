@@ -60,7 +60,7 @@ define(function(require, exports, module) {
     var RaisedButton = React.createClass({
     	render: function(){
             return (
-            		<input type="button" onClick={this.props.handleClick} value={this.props.label} />
+            		<input type="button" className={"waves-effect waves-light bttn"} onClick={this.props.handleClick} value={this.props.label} />
             );
         }
     	
@@ -78,7 +78,7 @@ define(function(require, exports, module) {
 	
     render: function(){
         return (
-    		<input type="textfield" id={this.props.id} value={this.props.sync_value}/>
+    		<input type="text"  id={this.props.id} value={this.props.sync_value}/>
 		);
     }
   	

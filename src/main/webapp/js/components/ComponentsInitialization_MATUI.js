@@ -34,38 +34,52 @@
 
 define(function (require) {
 	return function (GEPPETTO) {
+		
+	    var link = document.createElement("link");
+	    link.type = "text/css";
+	    link.rel = "stylesheet";
+	    link.href = "geppetto/js/components/MATUI.css";
+	    document.getElementsByTagName("head")[0].appendChild(link);
+	    
 		//Logo initialization 
 		GEPPETTO.ComponentFactory.addComponent('LOGO', {logo: 'gpt-gpt_logo'}, document.getElementById("geppettologo"));
 
-		//Control panel initialization
-		GEPPETTO.ComponentFactory.addComponent('CONTROLPANEL', {}, document.getElementById("controlpanel"));
-
-		//Spotlight initialization
-		GEPPETTO.ComponentFactory.addComponent('SPOTLIGHT', {}, document.getElementById("spotlight"));
-
-		//Foreground initialization
-		GEPPETTO.ComponentFactory.addComponent('FOREGROUND', {}, document.getElementById("foreground-toolbar"));
-
-		//Experiments table initialization
-		GEPPETTO.ComponentFactory.addComponent('EXPERIMENTSTABLE', {}, document.getElementById("experiments"));
-
-		//Home button initialization
-		GEPPETTO.ComponentFactory.addComponent('HOME', {}, document.getElementById("HomeButton"));
-
-		//Simulation controls initialization
-		GEPPETTO.ComponentFactory.addComponent('SIMULATIONCONTROLS', {}, document.getElementById("sim-toolbar"));
-
-		//Camera controls initialization
-		GEPPETTO.ComponentFactory.addComponent('CAMERACONTROLS', {}, document.getElementById("camera-controls"));
-
-		//Share controls initialization
-		GEPPETTO.ComponentFactory.addComponent('SHARE', {}, document.getElementById("share-button"));
 		
 		//Loading spinner initialization
 		GEPPETTO.on('show_spinner', function(label) {
 			GEPPETTO.ComponentFactory.addComponent('LOADINGSPINNER', {show : true, keyboard : false, text: label, logo: "gpt-gpt_logo"}, document.getElementById("modal-region"));	
 		});
-	
+		
+		
+		//Function to illustrate how panel component works
+		GEPPETTO.showingPanelConcept = function(){
+			var handleClick = function(){
+				console.log('handling click');
+			};
+			var handleTouchTap = function(){
+				console.log('handling touch tap');
+			};
+			
+			var panelChildren = [];
+			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('APPBAR',{id:'appBar', title:'App Bar',  handleClick: handleClick, handleTouchTap: handleTouchTap}));
+			panelChildren.push(GEPPETTO.ComponentFactory.getComponent('RAISEDBUTTON',{id:'raisedButton', label:'OK', handleClick: handleClick}));
+			
+//			var panelComponent = GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControl", name:"Run Control"});
+//			panelComponent.addChildren(panelChildren);
+			GEPPETTO.ComponentFactory.addComponent('PANEL', {id: "RunControlInit", name:"Run Control", items: panelChildren});
+		};
+		
+		//GEPPETTO.showingPanelConcept();
+		
+		$("#github").hide();
+        GEPPETTO.on(Events.Model_loaded, function () {
+        	G.setBackgroundColour("#004d40");
+        	
+        	//trying to hide jupyter header, needs to configure cross origin on jupyter
+        	//var header=$("#pyConsoleFrame")[0].contentWindow.document.getElementById("header");
+        	//$(header).hide();
+        });
+		
 		
 	};
 });

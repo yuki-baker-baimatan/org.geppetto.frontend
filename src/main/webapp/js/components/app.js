@@ -10,7 +10,7 @@ define(function(require) {
 	require('./ComponentFactory')(GEPPETTO);
 	//require('./ComponentsInitialization_OSB')(GEPPETTO);
 	//require('./ComponentsInitialization_VFB')(GEPPETTO);
-	require('./ComponentsInitialization')(GEPPETTO);
+	require('./ComponentsInitialization_MATUI')(GEPPETTO);
 	
 	require('./GeppettoJupyterWidgets');
 
