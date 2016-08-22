@@ -70,12 +70,6 @@ define(function (require) {
         	this.setState({ items: this.state.items.concat(items) });
         },
         
-        changeValue: function(id, value){
-        	console.log(id)
-        	console.log(value)
-        	console.log(this.state.items);
-        },
-        
         setChildren: function(items){
         	this.setState({ items: items });
         	this.forceUpdate();

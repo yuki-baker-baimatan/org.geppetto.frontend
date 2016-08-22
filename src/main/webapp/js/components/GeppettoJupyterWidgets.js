@@ -33,8 +33,6 @@ define(function(require, exports, module) {
                  model.on("change:sync_value", function(){
                 	 console.log("eoeoeo");
                 	 
-                	 this.model.get("component").changeValue(3,'ll');
-
                 	 this.componentItems = [];
                 	 
                 	 var that = this;
@@ -162,8 +160,14 @@ define(function(require, exports, module) {
 	    	view.send({event: 'click', data: data});
 	    },
 	    
+	    handleChange: function (view, value) {
+	    	view.model.set('sync_value', value);
+	    	view.send({event: 'change'});
+	    },
+	    
+	    
 	    getComponent: function () {
-	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), sync_value: this.model.get('sync_value'), handleClick: this.handleClick.bind(null, this)}));
+	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), sync_value: this.model.get('sync_value'), handleClick: this.handleClick.bind(null, this), handleChange: this.handleChange.bind(null, this)}));
 	    },
 
 	    // Render the view.

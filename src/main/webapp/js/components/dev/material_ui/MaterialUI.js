@@ -74,13 +74,19 @@ define(function(require, exports, module) {
     });
     
     var TextField = React.createClass({
-    	
+    	getInitialState: function() {
+    	    return {value: this.props.sync_value};
+    	  },
+    	  handleChange: function(event) {
+    	    this.setState({value: event.target.value});
+    	    this.props.handleChange(event.target.value);
+    	  },
 	
-    render: function(){
-        return (
-    		<input type="text"  id={this.props.id} value={this.props.sync_value}/>
-		);
-    }
+	    render: function(){
+	        return (
+	    		<input type="text" id={this.props.id} value={this.state.value} onChange={this.handleChange}/>
+			);
+	    }
   	
 //    	
 //        render: function(){
