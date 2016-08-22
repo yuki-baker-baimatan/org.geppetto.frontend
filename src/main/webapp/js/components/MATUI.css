@@ -21,6 +21,14 @@
 	margin:5px;
 }
 
+.checkboxContainer{
+    margin-top:13px!important;
+    text-align: left;
+    color: rgba(0,0,0,0.71);
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
 
 input[type=checkbox]:checked:not(:disabled) ~ .lever:active::after,input[type=checkbox]:checked:not(:disabled).tabbed:focus ~ .lever::after {
     box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4),0 0 0 15px rgba(38,166,154,0.1)
@@ -592,10 +600,10 @@ textarea.materialize-textarea {
     border-radius: 2px;
     display: inline-block;
     height: 36px;
+    width:160px;
     line-height: 36px;
     outline: 0;
     padding: 0 2rem;
-    text-transform: uppercase;
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent
 }

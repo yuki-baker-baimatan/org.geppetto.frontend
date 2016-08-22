@@ -99,9 +99,15 @@ define(function(require, exports, module) {
     });
     
     var Checkbox = React.createClass({
+    	
+  	  
         render: function(){
+        	
             return (
+            		<p className={"checkboxContainer"}>
             		<input type="checkbox" id={this.props.id} value={this.props.sync_value}/>
+            		<label htmlFor={this.props.id}/>
+            		</p>
     		);
         }
     });
