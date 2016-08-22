@@ -90,7 +90,7 @@
 				 <div class="tab-content">
     					<div role="tabpanel" class="tab-pane active" id="console">Console Loading...</div>
     					<div role="tabpanel" id="experiments" class="tab-pane panel panel-default"></div>
-						<div role="tabpanel" class="tab-pane panel" id="pyconsole">
+						<div role="tabpanel" class="tab-pane " id="pyconsole">
                         	<div class="col-lg-6 panel-body" id="pyConsoleOutput">
 	                           <iframe id="pyConsoleFrame" src="http://python.gpt.org:6655/notebooks/frontend-jupyter/gpt-jupyter3.ipynb" marginwidth="0" marginheight="0" frameborder="no" scrolling="yes" style="width:100%; height:100%"">
 	                          </iframe>
