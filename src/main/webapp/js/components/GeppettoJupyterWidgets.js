@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 	var PanelView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
+	        this.options.parent = options.parent;
 	        this.componentItems = [];
 	        
 	        PanelView.__super__.initialize.apply(this, arguments);
@@ -28,32 +29,32 @@ define(function(require, exports, module) {
 
         	
         	
-        	 model.state_change.then(function() {
-        		 
-                 model.on("change:sync_value", function(){
-                	 console.log("eoeoeo");
-                	 
-                	 this.componentItems = [];
-                	 
-                	 var that = this;
-                	 Promise.all(this.itemsList.views).then(function(views) {
-
-                		 Promise.all(views.map(function(currentView){
-                			 return currentView.getComponent().then(function(component) {
-	             	         		that.componentItems.push(component);
-	             	         		return component;
-	             	         });
-                			 })).then(function() {
-                	        	 that.model.get("component").setChildren(that.componentItems);
-                 	         	});
-                	 });
-                	 
-                 }, that);
-                 
-                 
-
-
-             });
+//        	 model.state_change.then(function() {
+//        		 
+//                 model.on("change:sync_value", function(){
+//                	 console.log("eoeoeo");
+//                	 
+//                	 this.componentItems = [];
+//                	 
+//                	 var that = this;
+//                	 Promise.all(this.itemsList.views).then(function(views) {
+//
+//                		 Promise.all(views.map(function(currentView){
+//                			 return currentView.getComponent().then(function(component) {
+//	             	         		that.componentItems.push(component);
+//	             	         		return component;
+//	             	         });
+//                			 })).then(function() {
+//                	        	 that.model.get("component").setChildren(that.componentItems);
+//                 	         	});
+//                	 });
+//                	 
+//                 }, that);
+//                 
+//                 
+//
+//
+//             });
         	
 //        	 var componentView = this.create_child_view(model)
 //            .then(function(view){
@@ -74,6 +75,29 @@ define(function(require, exports, module) {
          		return componentView;
          	});
             
+        },
+        
+        forceRender: function () {
+        	if (this.model.get("embedded") == false){
+	           	 this.componentItems = [];
+	           	 
+	           	 var that = this;
+	           	 Promise.all(this.itemsList.views).then(function(views) {
+	
+	           		 Promise.all(views.map(function(currentView){
+	           			 return currentView.getComponent().then(function(component) {
+	            	         		that.componentItems.push(component);
+	            	         		return component;
+	            	         });
+	           			 })).then(function() {
+	           	        	 that.model.get("component").setChildren(that.componentItems);
+	            	         	});
+	           	 });
+	           	 
+        	}
+        	else{
+        		this.options.parent.forceRender();
+        	}
         },
         
         getComponent: function () {
@@ -139,19 +163,13 @@ define(function(require, exports, module) {
 	    
 	    initialize: function() {
 	    	ComponentModel.__super__.initialize.apply(this);
-	    	this.on('change:sync_value', this.value_changed, this);
-        },
-        value_changed: function() {
-            console.log('changing jar');
-            console.log(this.get('sync_value'));
-            
-         },
+        }
 	});
 	
 	var ComponentView = jupyter_widgets.WidgetView.extend({
 	    initialize: function (options) {
 	        this.options = options || {};
-	    	//this.options.parent = options.parent;
+	    	this.options.parent = options.parent;
 	        ComponentView.__super__.initialize.apply(this, arguments);
 	    },
 
@@ -161,10 +179,10 @@ define(function(require, exports, module) {
 	    },
 	    
 	    handleChange: function (view, value) {
-	    	view.model.set('sync_value', value);
-	    	view.send({event: 'change'});
+	    	view.model.set('sync_value', parseFloat(value));
+	    	view.touch();
+	    	view.send({event: 'change', data: parseFloat(value)});
 	    },
-	    
 	    
 	    getComponent: function () {
 	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), sync_value: this.model.get('sync_value'), handleClick: this.handleClick.bind(null, this), handleChange: this.handleChange.bind(null, this)}));
@@ -173,6 +191,11 @@ define(function(require, exports, module) {
 	    // Render the view.
 	    render: function() {
 	       console.log('component view');
+	       var that = this;
+	       this.model.on("change:sync_value", function(model, value, options) {
+               console.log("take");
+               that.options.parent.forceRender();
+           }, that);
 	    }
 	});
 	

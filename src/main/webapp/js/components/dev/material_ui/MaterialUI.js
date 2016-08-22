@@ -79,16 +79,33 @@ define(function(require, exports, module) {
     	  },
     	  handleChange: function(event) {
     	    this.setState({value: event.target.value});
-    	    this.props.handleChange(event.target.value);
+    	    //this.props.handleChange(event.target.value);
     	  },
+    	  handleBlur: function(event) {
+      	    //this.setState({value: event.target.value});
+      	    this.props.handleChange(event.target.value);
+      	  },
+    	  componentWillReceiveProps: function(nextProps) {
+    		  this.setState({
+    			  value: nextProps.sync_value
+    		  });
+    		},
 	
 	    render: function(){
 	        return (
-	    		<input type="text" id={this.props.id} value={this.state.value} onChange={this.handleChange}/>
+	    		<input type="text" id={this.props.id} value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur}/>
 			);
 	    }
-  	
-//    	
+
+    	
+    	
+    	
+//	    render: function(){
+//        return (
+//    		<input type="text" id={this.props.id} value={this.props.sync_value}/>
+//		);
+//    }
+    	//    	
 //        render: function(){
 //            return (
 //        		<MuiThemeProvider>
