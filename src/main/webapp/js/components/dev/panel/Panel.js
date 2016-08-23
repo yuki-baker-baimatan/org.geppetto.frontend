@@ -72,8 +72,13 @@ define(function (require) {
         
         setChildren: function(items){
         	this.setState({ items: items });
-        	this.forceUpdate();
         },
+        
+        componentWillReceiveProps: function(nextProps) {
+  		  this.setState({
+  			  items: nextProps.items
+  		  });
+  		},
         
         setDirection: function(direction){
         	var currentStyle = this.state.parentStyle;

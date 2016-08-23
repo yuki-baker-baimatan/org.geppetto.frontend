@@ -78,7 +78,7 @@ define(function(require, exports, module) {
         },
         
         forceRender: function () {
-        	if (this.model.get("embedded") == false){
+        	
 	           	 this.componentItems = [];
 	           	 
 	           	 var that = this;
@@ -90,14 +90,17 @@ define(function(require, exports, module) {
 	            	         		return component;
 	            	         });
 	           			 })).then(function() {
-	           	        	 that.model.get("component").setChildren(that.componentItems);
-	            	         	});
+	           				if (that.model.get("embedded") == false){   	 
+	           					that.model.get("component").setChildren(that.componentItems);
+	           	        	}
+	           	        	else{
+	           	        		that.options.parent.forceRender();
+	           	        	}
+	           				 
+	           			 });
 	           	 });
-	           	 
-        	}
-        	else{
-        		this.options.parent.forceRender();
-        	}
+	        
+	        
         },
         
         getComponent: function () {
