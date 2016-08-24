@@ -34,6 +34,7 @@
 
 .checkboxContainer{
     margin-top:13px!important;
+    margin-bottom:0px!important;
     text-align: left;
     color: rgba(0,0,0,0.71);
     padding: 0;
@@ -282,7 +283,7 @@ input:not([type]),input[type=text],input[type=password],input[type=email],input[
     height: 3rem;
     width: 100%;
     font-size: 1rem;
-    margin: 0 0 20px 0;
+    margin: 0 0 1px 0;
     padding: 0;
     box-shadow: none;
     box-sizing: content-box;
