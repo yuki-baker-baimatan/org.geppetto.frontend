@@ -79,11 +79,11 @@ define(function(require, exports, module) {
     	  },
     	  handleChange: function(event) {
     	    this.setState({value: event.target.value});
-    	    //this.props.handleChange(event.target.value);
+    	    this.props.handleChange(event.target.value);
     	  },
     	  handleBlur: function(event) {
       	    //this.setState({value: event.target.value});
-      	    this.props.handleChange(event.target.value);
+      	    this.props.handleBlur(event.target.value);
       	  },
     	  componentWillReceiveProps: function(nextProps) {
     		  this.setState({
@@ -97,15 +97,6 @@ define(function(require, exports, module) {
 			);
 	    }
 
-    	
-    	
-    	
-//	    render: function(){
-//        return (
-//    		<input type="text" id={this.props.id} value={this.props.sync_value}/>
-//		);
-//    }
-    	//    	
 //        render: function(){
 //            return (
 //        		<MuiThemeProvider>
@@ -116,13 +107,27 @@ define(function(require, exports, module) {
     });
     
     var Checkbox = React.createClass({
-    	
+    	  getInitialState: function () {
+    		    return {
+    		        value: (this.props.sync_value == 'true')
+    		     };
+    		  },
+    	  handleChange: function(event) {
+    		  this.setState({value: event.target.checked});
+    		  console.log(event.target.checked);
+    	    //this.props.handleChange(event.target.value);
+    	  },
+    	  componentWillReceiveProps: function(nextProps) {
+    		  this.setState({
+    			  value: (nextProps.sync_value == 'true')
+    		  });
+    		},
   	  
         render: function(){
         	
             return (
             		<p className={"checkboxContainer"}>
-            		<input type="checkbox" id={this.props.id} value={this.props.sync_value}/>
+            		<input type="checkbox" id={this.props.id} checked={this.state.value} onChange={this.handleChange}/>
             		<label htmlFor={this.props.id}/>
             		</p>
     		);

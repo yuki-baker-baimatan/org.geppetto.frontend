@@ -182,18 +182,23 @@ define(function(require, exports, module) {
 	    },
 	    
 	    handleChange: function (view, value) {
-	    	view.model.set('sync_value', parseFloat(value));
+	    	view.model.set('sync_value', value);
 	    	view.touch();
 	    	view.send({event: 'change', data: parseFloat(value)});
 	    },
 	    
+	    handleBlur: function (view, value) {
+//	    	view.model.set('sync_value', value);
+//	    	view.touch();
+	    	view.send({event: 'blur', data: parseFloat(value)});
+	    },
+	    
 	    getComponent: function () {
-	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), sync_value: this.model.get('sync_value'), handleClick: this.handleClick.bind(null, this), handleChange: this.handleChange.bind(null, this)}));
+	    	return Promise.resolve(GEPPETTO.ComponentFactory.getComponent(this.model.get('component_name'),{id:this.model.get('widget_id'), label:this.model.get('widget_name'), parentStyle:this.model.get('parentStyle'), sync_value: this.model.get('sync_value'), handleClick: this.handleClick.bind(null, this), handleChange: this.handleChange.bind(null, this), handleBlur: this.handleBlur.bind(null, this)}));
 	    },
 
 	    // Render the view.
 	    render: function() {
-	       console.log('component view');
 	       var that = this;
 	       this.model.on("change:sync_value", function(model, value, options) {
                console.log("take");
