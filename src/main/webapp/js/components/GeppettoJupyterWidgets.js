@@ -182,6 +182,11 @@ define(function(require, exports, module) {
 	    },
 	    
 	    handleChange: function (view, value) {
+	    	//TODO: Extract to an specific class (for checkbox component we need to save the value on change)
+	    	if (view.model.get('component_name') == 'CHECKBOX'){
+	    		view.model.set('sync_value', value);
+		    	view.touch();
+	    	}
 	    	view.send({event: 'change', data: parseFloat(value)});
 	    },
 	    
