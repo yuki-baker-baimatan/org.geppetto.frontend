@@ -114,8 +114,7 @@ define(function(require, exports, module) {
     		  },
     	  handleChange: function(event) {
     		  this.setState({value: event.target.checked});
-    		  console.log(event.target.checked);
-    	    //this.props.handleChange(event.target.value);
+    	      this.props.handleChange(event.target.value);
     	  },
     	  componentWillReceiveProps: function(nextProps) {
     		  this.setState({
@@ -124,7 +123,6 @@ define(function(require, exports, module) {
     		},
   	  
         render: function(){
-        	
             return (
             		<p className={"checkboxContainer"}>
             		<input type="checkbox" id={this.props.id} checked={this.state.value} onChange={this.handleChange}/>
@@ -133,7 +131,6 @@ define(function(require, exports, module) {
     		);
         }
     });
-
     
     module.exports= {
     	AppBar: AppBar,

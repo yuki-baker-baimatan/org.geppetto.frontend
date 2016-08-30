@@ -182,14 +182,12 @@ define(function(require, exports, module) {
 	    },
 	    
 	    handleChange: function (view, value) {
-	    	view.model.set('sync_value', value);
-	    	view.touch();
 	    	view.send({event: 'change', data: parseFloat(value)});
 	    },
 	    
 	    handleBlur: function (view, value) {
-//	    	view.model.set('sync_value', value);
-//	    	view.touch();
+	    	view.model.set('sync_value', value);
+	    	view.touch();
 	    	view.send({event: 'blur', data: parseFloat(value)});
 	    },
 	    
@@ -201,7 +199,6 @@ define(function(require, exports, module) {
 	    render: function() {
 	       var that = this;
 	       this.model.on("change:sync_value", function(model, value, options) {
-               console.log("take");
                that.options.parent.forceRender();
            }, that);
 	    }
