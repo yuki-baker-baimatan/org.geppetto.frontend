@@ -63,8 +63,8 @@ define(function (require) {
 					simulator:{
 					      type: "string",
 					      title: "Simulator",
-					      enum: ["neuronSimulator", "lemsSimulator", "neuronNSGSimulator"],
-					      enumNames: ["Neuron", "jLems", "Neuron on NSG"]
+					      enum: ["neuronSimulator", "lemsSimulator", "neuronNSGSimulator", "netPyNENSGSimulator"],
+					      enumNames: ["Neuron", "jLems", "Neuron on NSG", "NetPyne on NSG"]
 					},
 	
 					numberProcessors:{type:'number', title: 'Number of Processors'}
