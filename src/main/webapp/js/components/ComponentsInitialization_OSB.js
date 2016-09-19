@@ -154,6 +154,20 @@ define(function (require) {
 			});
 		};
 		
+		window.getMembranePotentialsAtSoma = function(){
+		  var trail = ".v";
+		  var instances = GEPPETTO.ModelFactory.getAllPotentialInstancesEndingWith(trail);
+		  var instancesToRecord=[];
+		  for(var i=0;i<instances.length;i++){
+		    var s=instances[i].split(trail)[0];
+		    if(s.endsWith("_0") || s.endsWith("]")){
+		      instancesToRecord.push(instances[i]);
+		    }
+		  }
+		  return Instances.getInstance(instancesToRecord);
+		};
+
+		
 		window.getRecordedMembranePotentials=function(){
 			var instances=Project.getActiveExperiment().getWatchedVariables(true,false);
 			var v=[];
@@ -173,6 +187,10 @@ define(function (require) {
 		    {
 		    	label: "Play step by step",
 		        action: "Project.getActiveExperiment().play({step:1});"
+		    },
+		    {
+		    	label: "Play step by step (10x)",
+		    	action: "Project.getActiveExperiment().play({step:10});"
 		    },
 		    {
 		    	label: "Play step by step (100x)",
@@ -228,5 +246,9 @@ define(function (require) {
         GEPPETTO.on(Events.Project_loading, function () {
 				$('.osb-notification').remove();
         });
+        
+        GEPPETTO.G.setIdleTimeOut(-1);
+        
+        GEPPETTO.SceneController.setLinesThreshold(20000);
 	};
 });
