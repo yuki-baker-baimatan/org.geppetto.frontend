@@ -105,15 +105,6 @@ function testProject(test, url, expect_error, persisted, spotlight_record_variab
           this.waitForSelector('button.btn.SaveButton', function() {
             test.assertVisible('button.btn.SaveButton', "Persist button is present");
           });
-
-          //Good pattern for checking the absence of an attribute
-          test.assertEvalEquals(function() {
-            return require('utils').dump(this.getElementAttribute('button.SaveButton', 'disabled'));
-          }, null, "The persist button is correctly active.");
-
-          //Click persist button. Check things again
-          this.mouseEvent('click','button.btn.SaveButton', "attempting to persist");
-
         });
 
         //TODO: make this work
@@ -214,9 +205,18 @@ function doConsoleTest(test) {
 	}
 
 function doExperimentsTableRowCheck(test) {
-  test.assertVisible('td[name="parameters"]', "Parameters column content exists");
+	
+	casper.then(function() {
+	    this.click('a[href="#experiments"]', "Opening experiment console");
+	    
+	    this.waitUntilVisible('div#experiments', function() {
+	          this.mouseEvent('click','tr.experimentsTableColumn:nth-child(1)', "opening first experiment row");
 
-  test.assertVisible('td[name="variables"]', "Variables column content exists");
+	    	  test.assertVisible('td[name="parameters"]', "Parameters column content exists");
+
+	    	  test.assertVisible('td[name="variables"]', "Variables column content exists");
+	    }, null, 5000);
+	  });
 }
 
 function doPrePersistenceExperimentsTableButtonsCheck(test) {
@@ -226,9 +226,7 @@ function doPrePersistenceExperimentsTableButtonsCheck(test) {
     test.assertNotVisible('a.activeIcon', "active button exists and is correctly not enabled");
   }, null, 5000);
 
-  casper.waitForSelector('a.deleteIcon', function() {
-    test.assertDoesntExist('a.enabled.deleteIcon', "delete button exists and is correctly not enabled");
-  }, null, 5000);
+  test.assertDoesntExist('a.enabled.deleteIcon', "delete button exists and is correctly not enabled");
 
   casper.waitForSelector('a.downloadResultsIcon', function() {
     test.assertNotVisible('a.downloadResultsIcon', "download results button exists and is correctly not enabled");
