@@ -175,7 +175,7 @@ function doExperimentTableTest(test) {
   casper.then(function() {
     casper.waitUntilVisible('div#experiments', function() {
       test.assertVisible('div#experiments', "The experiment panel is correctly open.");
-    });
+    }, null, 20000);
   });
 }
 
