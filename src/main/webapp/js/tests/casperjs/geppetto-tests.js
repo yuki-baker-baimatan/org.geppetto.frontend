@@ -1,5 +1,5 @@
 //var TARGET_URL = "http://docker-x2go-development-1.dd76b43e.cont.dockerapp.io"
-var TARGET_URL = "127.0.0.1"
+var TARGET_URL = "http://127.0.0.1"
 var PROJECT_URL_SUFFIX = "?load_project_from_url=https://raw.githubusercontent.com/openworm/org.geppetto.samples/development/UsedInUnitTests/SingleComponentHH/GEPPETTO.json"
 var PROJECT_URL_SUFFIX_2 = "?load_project_from_url=https://raw.githubusercontent.com/openworm/org.geppetto.samples/development/UsedInUnitTests/pharyngeal/project.json"
 var PROJECT_URL_SUFFIX_3 = "?load_project_from_url=https://raw.githubusercontent.com/openworm/org.geppetto.samples/development/UsedInUnitTests/balanced/project.json"
