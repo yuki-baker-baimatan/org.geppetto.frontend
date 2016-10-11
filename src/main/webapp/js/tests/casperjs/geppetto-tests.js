@@ -235,31 +235,59 @@ function doPrePersistenceExperimentsTableButtonsCheck(test) {
     , 30000);
   }
 
-function doPostPersistenceExperimentsTableButtonCheck(test) {
-  casper.waitForSelector('button.btn.SaveButton[disabled]', function() {
-    //Check presence of experiment console buttons AFTER persistence
-    casper.waitForSelector('a.activeIcon', function() {
-      test.assertNotVisible('a.activeIcon', "active button exists and is correctly not enabled");
-    }, null, 5000);
+  function doPostPersistenceExperimentsTableButtonCheck(test) {
 
-    casper.waitUntilVisible('a.deleteIcon', function() {
-      test.assertVisible('a.deleteIcon', "delete button exists and is correctly enabled");
-    }, null, 5000);
+    casper.waitFor(function check() {
+      return this.exists('button.btn.SaveButton[disabled]') &&
+      this.exists('a.activeIcon') &&
+      !this.visible('a.activeIcon') &&
+      this.exists('a.deleteIcon') &&
+      this.visible('a.deleteIcon') &&
+      this.exists('a.downloadResultsIcon') &&
+      !this.visible('a.downloadResultsIcon') &&
+      this.exists('a.downloadModelsIcon') &&
+      this.visible('a.downloadModelsIcon') &&
+      this.exists('a.cloneIcon') &&
+      this.visible('a.cloneIcon')
+    }, function then() {
 
-    casper.waitForSelector('a.downloadResultsIcon', function() {
-      test.assertNotVisible('a.downloadResultsIcon', "download results button exists and is correctly not enabled");
-    }, null, 5000);
+        test.assertNotVisible('a.activeIcon', "active button exists and is correctly not enabled");
 
-    casper.waitUntilVisible('a.downloadModelsIcon', function() {
-      test.assertVisible('a.downloadModelsIcon', "download models button exists and is correctly enabled");
-    }, null, 5000);
+        test.assertVisible('a.deleteIcon', "delete button exists and is correctly enabled");
 
-    casper.waitUntilVisible('a.cloneIcon', function() {
-      test.assertVisible('a.cloneIcon', "clone button exists and is correctly enabled");
-    }, null, 5000);
-  });
-}
+        test.assertNotVisible('a.downloadResultsIcon', "download results button exists and is correctly not enabled");
 
+        test.assertVisible('a.downloadModelsIcon', "download models button exists and is correctly enabled");
+
+        test.assertVisible('a.cloneIcon', "clone button exists and is correctly enabled");
+
+      }, function timeout() {
+        this.capture('very-strange.png');
+        this.echo("Somehow the icons didn't load correctly; check screenshot: \'very-strange.png\'").exit();
+        var logString = "Here is a report of the variable state that was seen (all should be true):"
+        logString = logString + "\nthis.exists('button.btn.SaveButton[disabled]'): " +
+        this.exists('button.btn.SaveButton[disabled]')
+        logString = logString + "\nthis.exists('a.activeIcon'): " + this.exists('a.activeIcon')
+        logString = logString + "\n!this.visible('a.activeIcon'): " +
+        !this.visible('a.activeIcon')
+        logString = logString + "\nthis.exists('a.deleteIcon'): " +
+        this.exists('a.deleteIcon')
+        logString = logString + "\nthis.visible('a.deleteIcon'): " +
+        this.visible('a.deleteIcon')
+        logString = logString + "\nthis.exists('a.downloadResultsIcon'): " +
+        this.exists('a.downloadResultsIcon')
+        logString = logString + "\n!this.visible('a.downloadResultsIcon'): " +
+        !this.visible('a.downloadResultsIcon')
+        logString = logString + "\nthis.exists('a.downloadModelsIcon'): " +
+        this.exists('a.downloadModelsIcon')
+        logString = logString + "\nthis.visible('a.downloadModelsIcon'): " + this.visible('a.downloadModelsIcon')
+        logString = logString + "\nthis.exists('a.cloneIcon'): " + this.exists('a.cloneIcon')
+        logString = logString + "\nthis.visible('a.cloneIcon'): " +
+        this.visible('a.cloneIcon')
+        this.echo(logString);
+      }
+      , 30000);
+    }
 
 function doSpotlightCheck(test, spotlight_search, persisted, check_recorded_or_set_parameters) {
   test.assertExists('i.fa-search', "Spotlight button exists")
