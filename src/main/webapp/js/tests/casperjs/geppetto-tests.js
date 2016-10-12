@@ -166,14 +166,8 @@ function doExperimentTableTest(test) {
     test.assertExists('div#experiments', "Experiments panel is present");
 
     test.assertNotVisible('div#experiments', "The experiment panel is correctly closed.");
-  });
-
-  casper.then(function() {
-    casper.mouseEvent('click', 'a[aria-controls="experiments"]', "Opening experiment console");
-  });
-
-  casper.then(function() {
-    casper.waitUntilVisible('div#experiments', function() {
+  }).thenClick('a[aria-controls="experiments"]', function() {
+    this.waitUntilVisible('div#experiments', function() {
       test.assertVisible('div#experiments', "The experiment panel is correctly open.");
     }, null, 20000);
   });
