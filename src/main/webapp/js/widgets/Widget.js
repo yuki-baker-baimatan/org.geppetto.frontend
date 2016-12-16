@@ -572,6 +572,9 @@ define(function (require) {
                         	  that.$el.dialog({ title: label});
                         	  that.setTrasparentBackground(that.previousMaxTransparency);
                            },
+                           "beforeCollapse" : function(evt, dlg){
+                         	  that.setTrasparentBackground(that.previousMaxTransparency);
+                            },
                            "beforeMaximize" :function(evt,dlg){
                         	   var divheight =that.size.height;  
                         	   var divwidth =that.size.width;    
