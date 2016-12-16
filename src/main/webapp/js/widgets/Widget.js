@@ -570,6 +570,7 @@ define(function (require) {
                         	  var label = that.name;
                         	  label = label.substring(0, 6);
                         	  that.$el.dialog({ title: label});
+                        	  that.setTrasparentBackground(that.previousMaxTransparency);
                            },
                            "beforeMaximize" :function(evt,dlg){
                         	   var divheight =that.size.height;  
