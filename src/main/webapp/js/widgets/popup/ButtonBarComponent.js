@@ -84,7 +84,10 @@ define(function (require) {
 			}
 		},
 
-
+		componentDidUpdate : function(){
+			this.props.resize();
+		},
+		
 		componentWillUnmount: function () {
 			console.log("unmount");
 			this.props= {};

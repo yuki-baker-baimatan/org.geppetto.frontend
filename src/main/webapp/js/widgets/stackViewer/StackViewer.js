@@ -88,8 +88,14 @@ define(function (require) {
 				that.resize();
 			});
 			
+			this.stackElement.dialog({
+				resize: function(event, ui) { 
+					that.resize(true); 
+				}
+			});
+
 			window.addEventListener('resize', function(event){
-				that.stackElement.find(".fa-home").click();
+	            that.stackElement.find(".fa-home").click();
             });
         },
 
@@ -103,7 +109,7 @@ define(function (require) {
         },
         
         resize : function(){
-        	this.data.height = this.stackElement.height();
+        	this.data.height = this.stackElement.parent().height()-10;
         	this.data.width = this.stackElement.parent().width();
             this.updateScene();
             this.stackElement.find(".fa-home").click();
