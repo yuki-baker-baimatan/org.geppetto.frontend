@@ -109,9 +109,8 @@ define(function (require) {
         },
         
         resize : function(){
-        	this.data.height = this.stackElement.parent().height()-10;
-        	this.data.width = this.stackElement.parent().width();
-            this.updateScene();
+            this.setSize(this.stackElement.parent().height(), this.stackElement.parent().width());
+
             this.stackElement.find(".fa-home").click();
         },
 
